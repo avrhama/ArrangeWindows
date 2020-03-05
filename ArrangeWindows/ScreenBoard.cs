@@ -4,18 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+
+    public static class Extension
+    {
+        public static Point copy(this Point p)
+        {
+            return new Point(p.X, p.Y);
+        }
+    public static Size copy(this Size s)
+    {
+        return new Size(s.Width, s.Height);
+    }
+}
+
 namespace ArrangeWindows
 {
     //represents a application location and size on screen.
    public class ScreenBoard
     {
+        public int Index { set; get; }
         public ScreenBoard Parent { set; get; }
         public ScreenBoard First { set; get; }
         public ScreenBoard Second { set; get; }
-        private Point bottomRight;
+        private Ancor topLeft;
+        private Ancor bottomRight;
         private Size size;
-        public Point TopLeft { get; set; }
-        public Point BottomRight {
+        public Ancor TopLeft {
+            get
+            {
+                return topLeft;
+            }
+            set
+            {
+                size = new Size(bottomRight.X - value.X, bottomRight.Y - value.Y);
+                topLeft = value;
+            }
+        }
+        public Ancor BottomRight {
             get
             {
                 return bottomRight;
@@ -34,85 +59,165 @@ namespace ArrangeWindows
             }
             set
             {   
-                bottomRight = new Point(value.Width - TopLeft.X, value.Height - TopLeft.Y);
+                bottomRight = new Ancor(value.Width - TopLeft.X, value.Height - TopLeft.Y);
                 size = value;
             }
         }
 
         public ScreenBoard()
         {
-            this.TopLeft = new Point(0, 0);
-            this.bottomRight = new Point(0, 0);
+            this.topLeft = new Ancor(0, 0);
+            this.bottomRight = new Ancor(0, 0);
             this.size = new Size(0, 0);
         }
         public ScreenBoard(int x1,int y1,int x2,int y2)
         {
-            this.TopLeft = new Point(x1, y1);
-            this.bottomRight = new Point(x2, y2);
-            this.size = new Size(x2-x1, y2-y1);
+          topLeft = new Ancor(x1, y1);
+          bottomRight = new Ancor(x2, y2);
+          size = new Size(x2-x1, y2-y1);
         }
-        public ScreenBoard(Point topLeft,Point bottomRight)
+        public ScreenBoard(Ancor topLeft, Ancor bottomRight)
         {
-            this.TopLeft = new Point(topLeft.X, topLeft.Y);
-            this.bottomRight = new Point(bottomRight.X, bottomRight.Y);
-            this.size = new Size(bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
+            this.topLeft = new Ancor(topLeft.X, topLeft.Y);
+            this.bottomRight = new Ancor(bottomRight.X, bottomRight.Y);
+            size = new Size(bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
         }
-        public ScreenBoard addChild(ScreenBoard second, int t,string type)
+        public ScreenBoard addChild(ScreenBoard second, int t, string type)
         {
             ScreenBoard first;
             if (type == "v")
-                first = new ScreenBoard(this.TopLeft, new Point(t, this.BottomRight.Y));
+            {
+                // first = new ScreenBoard(TopLeft, new Ancor(t, this.BottomRight.Y));
+                first = new ScreenBoard();
+                first.TopLeft = TopLeft;
+                first.BottomRight = new Ancor(t, this.BottomRight.Y);
+            }
+
             else
-                first = new ScreenBoard(this.TopLeft, new Point(this.BottomRight.X, t));
+                first = new ScreenBoard(TopLeft, new Ancor(this.BottomRight.X, t));
             First = first;
             first.Parent = this;
             Second = second;
             second.Parent = this;
             return first;
         }
-        public void updateBottomRight(int x, int y, int t)
+        /* public ScreenBoard addChild(Ancor ancorSplit,string type)
+         {
+             ScreenBoard first;
+             ScreenBoard second;
+             if (type == "v")
+             {
+                 second = new ScreenBoard(ancorSplit.X, selected.TopLeft.Y, selected.BottomRight.X, selected.BottomRight.Y);
+
+                 first = new ScreenBoard();
+                 first.TopLeft = TopLeft;
+                 first.BottomRight = new Ancor(t, this.BottomRight.Y);
+             }
+
+             else
+                 first = new ScreenBoard(TopLeft, new Ancor(this.BottomRight.X, t));
+             First = first;
+             first.Parent = this;
+             Second = second;
+             second.Parent = this;
+             return First;
+         }*/
+        //update x propery's variable to new value of n
+        public void updateX(int n, int m,string proertyName)
         {
-            if (t != BottomRight.X)
+          Ancor p=(Ancor)typeof(ScreenBoard).GetProperty(proertyName).GetValue(this);
+            if (m != p.X)
                 return;
-            BottomRight = new Point(x, y);
-            if (Second != null)
+
+            if (First != null)
             {
-                First.updateBottomRight(x, y, t);
-                Second.updateBottomRight(x, y, t);
+                First.updateX(n, m, proertyName);
+                Second.updateX(n, m, proertyName);
             }
-            
-            
+           typeof(ScreenBoard).GetProperty(proertyName).SetValue(this, new Ancor(n, p.Y));
         }
-        public ScreenBoard removeChild(ScreenBoard child)
+
+        public void updateY(int n, int m, string proertyName)
+        {
+            Ancor p = (Ancor)typeof(ScreenBoard).GetProperty(proertyName).GetValue(this);
+            if (m != p.Y)
+                return;
+
+            if (First != null)
+            {
+                First.updateX(n, m, proertyName);
+                Second.updateX(n, m, proertyName);
+            }
+            typeof(ScreenBoard).GetProperty(proertyName).SetValue(this, new Ancor(p.X, n));
+        }
+        public void replace(ScreenBoard sb)
         {
             
-            if (Second != null)
+            TopLeft = sb.TopLeft.copy();
+            BottomRight = sb.BottomRight.copy();
+            First = sb.First;
+            Second = sb.Second;
+            Parent = sb.Parent;
+        }
+
+
+        public void removeChild(ScreenBoard child)
+        {
+            
+            if (First != null)
             {
-                int cmp = ScreenBoard.compareScreenBoard(First,child);
-                if(cmp == 0)
+                //int cmp = compareScreenBoard(First,child);
+                ScreenBoard otherChild;
+                if (child.isFirst())
                 {
+                    if (First.TopLeft.Y == Second.TopLeft.Y)
+                        Second.updateX(child.TopLeft.X, child.BottomRight.X, "TopLeft");
+                    else
+                        Second.updateY(child.TopLeft.Y, child.BottomRight.Y, "TopLeft");
+                    otherChild = Second;
 
                 }
                 else
                 {
-                    First.updateBottomRight(child.BottomRight.X, child.BottomRight.Y, child.TopLeft.X);
-                    if (First.Parent.Parent != null)
-                        First.Parent = First.Parent.Parent;
-                    child.Parent = null;
-                    return First;
+                    if(First.TopLeft.Y==Second.TopLeft.Y)
+                    First.updateX(child.BottomRight.X, child.TopLeft.X, "BottomRight");
+                    else
+                        First.updateY(child.BottomRight.Y, child.TopLeft.Y, "BottomRight");
+                    otherChild = First;
+
                 }
-                First = null;
-                Second = null;
-                return this;
+
+                ScreenBoard parent = Parent;
+                if (parent != null)
+                {
+                    //cmp = ScreenBoard.compareScreenBoard(this, parent.First);
+                    if (this.isFirst())
+                        parent.First = otherChild;
+                    else
+                        parent.Second = otherChild;
+                    otherChild.Parent = parent;
+                }
+                else
+                {
+                    otherChild.Parent = null;
+                    replace(otherChild);
+                }
+               
             }
             else
             {
-                return Parent.remove();
+                 Parent.remove();
             }
         }
-        public ScreenBoard remove()
+
+        public void remove()
         {
-            return Parent?.removeChild(this);
+             Parent?.removeChild(this);
+        }
+        public bool isFirst()
+        {
+            
+            return ScreenBoard.compareScreenBoard(this.Parent.First, this)== 0;
         }
         static public int compareScreenBoard(ScreenBoard a, ScreenBoard b)
         {
