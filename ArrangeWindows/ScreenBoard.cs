@@ -242,7 +242,8 @@ namespace ArrangeWindows
                     {
                         First.registerCoordinateChangedEvent(First.topLeft, false);
                         First.registerCoordinateChangedEvent(First.bottomLeft, false);
-                        Second.topLeft = First.topLeft;
+                        First.topRight.setXY(First.topLeft);
+                        First.bottomRight.setXY(First.bottomLeft);
                         Second.bottomLeft = First.bottomLeft;
                         Second.registerCoordinateChangedEvent(Second.topLeft);
                         Second.registerCoordinateChangedEvent(Second.bottomLeft);
@@ -251,6 +252,8 @@ namespace ArrangeWindows
                     {
                         First.registerCoordinateChangedEvent(First.topLeft, false);
                         First.registerCoordinateChangedEvent(First.topRight, false);
+                        First.bottomLeft.setXY(First.topLeft);
+                        First.bottomRight.setXY(First.topRight);
                         Second.topLeft = First.topLeft;
                         Second.topRight = First.topRight;
                         Second.registerCoordinateChangedEvent(First.topLeft);
@@ -267,8 +270,8 @@ namespace ArrangeWindows
                         
                         //Second.registerCoordinateChangedEvent(Second.topRight,false);
                         Second.registerCoordinateChangedEvent(Second.bottomRight, false);
-                        Second.topLeft = Second.topRight;
-                        Second.bottomLeft = Second.bottomRight;
+                        Second.topLeft.setXY(Second.topRight);
+                        Second.bottomLeft.setXY(Second.bottomRight);
                         First.topRight = Second.topRight;
                         First.bottomRight = Second.bottomRight;
                         First.registerCoordinateChangedEvent(First.topRight);
@@ -280,6 +283,8 @@ namespace ArrangeWindows
                     {
                         Second.registerCoordinateChangedEvent(Second.bottomRight, false);
                         Second.registerCoordinateChangedEvent(Second.bottomLeft, false);
+                        Second.topLeft.setXY(Second.bottomLeft);
+                        Second.topRight.setXY(Second.bottomRight);
                         First.bottomRight = Second.bottomRight;
                         First.bottomLeft = Second.bottomLeft;
                         First.registerCoordinateChangedEvent(First.bottomRight);
