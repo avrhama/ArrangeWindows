@@ -38,12 +38,51 @@ namespace ArrangeWindows
             }
             set
             {
-                size = new Size(bottomRight.X - value.X, bottomRight.Y - value.Y);
-                TopRight.X = value.X;
-                BottomLeft.X = value.X;
+                /*                size = new Size(bottomRight.X - value.X, bottomRight.Y - value.Y);
+                                TopRight.Y = value.Y;
+                                BottomLeft.X = value.X;
+                                topLeft = value;*/
+                // setTopLeft(value);
                 topLeft = value;
             }
         }
+        public void setTopLeft(Ancor value)
+        {
+            if (value == topLeft)
+                return;
+            size = new Size(bottomRight.X - value.X, bottomRight.Y - value.Y);
+            setTopRight(topRight.setY(value.Y));
+            setBottomLeft(bottomLeft.setX(value.X));
+            topLeft = value;
+        }
+/*        public int TopLeftX
+        {
+            get
+            {
+                return topLeft.X;
+            }
+            set
+            {
+
+                BottomLeft.X = value;
+                topLeft.X = value;
+                size = new Size(bottomRight.X - value, size.Height);
+            }
+        }
+        public int TopLeftY
+        {
+            get
+            {
+                return topLeft.X;
+            }
+            set
+            {
+
+                BottomLeft.X = value;
+                topLeft.X = value;
+                size = new Size(bottomRight.X - value, size.Height);
+            }
+        }*/
         public Ancor TopRight
         {
             get
@@ -52,12 +91,24 @@ namespace ArrangeWindows
             }
             set
             {
-                size = new Size(value.X - BottomLeft.X,value.Y- BottomLeft.Y);
-                TopLeft.Y = value.Y;
-                BottomRight.X = value.X;
-                TopRight = value;
-                
+                /*                size = new Size(value.X - BottomLeft.X,value.Y- BottomLeft.Y);
+                                TopLeft.Y = value.Y;
+                                BottomRight.X = value.X;
+                                TopRight = value;*/
+                //setTopRight(value);
+                topRight = value;
+
             }
+        }
+        public void setTopRight(Ancor value)
+        {
+            
+            if (value == topRight)
+                return;
+            size = new Size(value.X - bottomLeft.X, value.Y - bottomLeft.Y);
+            setTopLeft(topLeft.setY(value.Y));
+            setBottomRight(bottomRight.setX(value.X));
+            topRight = value;
         }
         public Ancor BottomRight {
             get
@@ -66,11 +117,22 @@ namespace ArrangeWindows
             }
             set
             {
-                size = new Size(value.X - TopLeft.X, value.Y - TopLeft.Y);
-                TopRight.X = value.X;
-                BottomLeft.Y = value.Y;
+                /*                size = new Size(value.X - TopLeft.X, value.Y - TopLeft.Y);
+                                TopRight.X = value.X;
+                                BottomLeft.Y = value.Y;
+                                bottosetBottomRightmRight = value;*/
+                // setBottomRight(value);
                 bottomRight = value;
             }
+        }
+        public void setBottomRight(Ancor value)
+        {
+            if (value== bottomRight)
+                return;
+            size = new Size(value.X - topLeft.X, value.Y - topLeft.Y);
+            setTopRight(topRight.setX(value.X));
+            setBottomLeft(bottomLeft.setY(value.Y));
+            bottomRight = value;
         }
         public Ancor BottomLeft
         {
@@ -80,11 +142,22 @@ namespace ArrangeWindows
             }
             set
             {
-                size = new Size(TopRight.X-value.X, TopRight.Y - value.Y);
-                TopLeft.X = value.X;
-                BottomRight.Y = value.Y;
-                bottomLeft = value;
+                /*                size = new Size(TopRight.X-value.X, TopRight.Y - value.Y);
+                                TopLeft.X = value.X;
+                                BottomRight.Y = value.Y;
+                                bottomLeft = value;*/
+                // setBottomLeft(value);
+                bottomLeft=value;
             }
+        }
+        public void setBottomLeft(Ancor value)
+        {
+            if (value == bottomLeft)
+                return;
+            size = new Size(topRight.X - value.X, topRight.Y - value.Y);
+            setTopLeft(topLeft.setX(value.X));
+            setBottomRight(bottomRight.setY(value.Y));
+            bottomLeft = value;
         }
         public Size Size
         {
@@ -94,7 +167,7 @@ namespace ArrangeWindows
             }
             set
             {   
-                bottomRight = new Ancor(value.Width - TopLeft.X, value.Height - TopLeft.Y);
+                //bottomRight = new Ancor(value.Width - TopLeft.X, value.Height - TopLeft.Y);
                 size = value;
             }
         }
@@ -107,10 +180,10 @@ namespace ArrangeWindows
         }
         public ScreenBoard(int x1,int y1,int x2,int y2)
         {
-          topLeft = new Ancor(x1, y1);
-            topRight = new Ancor(x2, y1);
+            topLeft = new Ancor(x1, y1);
             bottomRight = new Ancor(x2, y2);
-            bottomLeft = new Ancor(x1, y2);
+            topRight = new Ancor(bottomRight.X, topLeft.Y);       
+            bottomLeft = new Ancor(topLeft.X, bottomRight.Y);
             size = new Size(x2-x1, y2-y1);
           
         }
@@ -144,30 +217,61 @@ namespace ArrangeWindows
         //    second.Parent = this;
         //    return first;
         //}
-        public ScreenBoard addChild(int x,int y, string type)
+        /*      public ScreenBoard addChild(int x,int y, string type)
+              {
+                  ScreenBoard first;
+                  ScreenBoard second;
+                  if (type == "v")
+                  {
+                      //topright fot first and topleft for second.
+                      Ancor a1 = new Ancor(x, TopLeft.Y);
+                      //bottomright for first and bottomleft for second.
+                      Ancor a2 = new Ancor(x, BottomLeft.Y);
+                      first = new ScreenBoard(TopLeft, a1, a2, BottomLeft);
+                      second = new ScreenBoard(a1, TopRight,BottomRight, a2);
+
+                  }
+                  else
+                  {
+                      //bottomleft fot first and topleft for second.
+                      Ancor a1 = new Ancor(BottomLeft.X, y);
+                      //bottomright for first and topright for second.
+                      Ancor a2 = new Ancor(BottomRight.X, y);
+                      first = new ScreenBoard(TopLeft, TopRight, a2, a1);
+                      second = new ScreenBoard(a1, a2, BottomRight, BottomLeft);
+                  }
+
+                  First = first;
+                  first.Parent = this;
+                  Second = second;
+                  second.Parent = this;
+                  return First;
+              }*/
+        public ScreenBoard addChild(int x, int y, string type)
         {
             ScreenBoard first;
             ScreenBoard second;
+            //Ancor:topLeft,topRight,bottomRight,bottomLeft
             if (type == "v")
             {
                 //topright fot first and topleft for second.
-                Ancor a1 = new Ancor(x, TopLeft.Y);
+                Ancor a1 = new Ancor(x, TopLeft.CoordinateY);
                 //bottomright for first and bottomleft for second.
-                Ancor a2 = new Ancor(x, BottomLeft.Y);
+                Ancor a2 = new Ancor(a1.CoordinateX, BottomLeft.CoordinateY);
                 first = new ScreenBoard(TopLeft, a1, a2, BottomLeft);
-                second = new ScreenBoard(a1, TopRight,BottomRight, a2);
-               
+                second = new ScreenBoard(a1, TopRight, BottomRight, a2);
+
             }
             else
             {
                 //bottomleft fot first and topleft for second.
-                Ancor a1 = new Ancor(BottomLeft.X, y);
+                Ancor a1 = new Ancor(BottomLeft.CoordinateX, y);
                 //bottomright for first and topright for second.
-                Ancor a2 = new Ancor(BottomRight.X, y);
+                Ancor a2 = new Ancor(BottomRight.CoordinateX, a1.CoordinateY);
                 first = new ScreenBoard(TopLeft, TopRight, a2, a1);
                 second = new ScreenBoard(a1, a2, BottomRight, BottomLeft);
             }
-                
+
             First = first;
             first.Parent = this;
             Second = second;
@@ -223,18 +327,37 @@ namespace ArrangeWindows
                 if (child.isFirst())
                 {
                     if (First.TopLeft.Y == Second.TopLeft.Y)
-                        Second.updateX(child.TopLeft.X, child.BottomRight.X, "TopLeft");
+                    {
+                        //Second.updateX(child.TopLeft.X, child.BottomRight.X, "TopLeft");
+                        Second.topLeft = First.topLeft;
+                        Second.bottomLeft = First.bottomLeft;
+                    }  
                     else
-                        Second.updateY(child.TopLeft.Y, child.BottomRight.Y, "TopLeft");
+                    {
+                        Second.topLeft = First.topLeft;
+                        Second.topRight = First.topRight;
+                        //Second.updateY(child.TopLeft.Y, child.BottomRight.Y, "TopLeft");
+                    }
+                        
                     otherChild = Second;
 
                 }
                 else
                 {
-                    if(First.TopLeft.Y==Second.TopLeft.Y)
-                    First.updateX(child.BottomRight.X, child.TopLeft.X, "BottomRight");
+                    if (First.TopLeft.Y == Second.TopLeft.Y)
+                    {
+                        First.topRight = Second.topRight;
+                        First.bottomRight = Second.bottomRight;
+                        //First.updateX(child.BottomRight.X, child.TopLeft.X, "BottomRight");
+
+                    }
                     else
-                        First.updateY(child.BottomRight.Y, child.TopLeft.Y, "BottomRight");
+                    {
+                        First.bottomRight = Second.bottomRight;
+                        First.bottomLeft = Second.bottomLeft;
+                        // First.updateY(child.BottomRight.Y, child.TopLeft.Y, "BottomRight");
+
+                    }
                     otherChild = First;
 
                 }

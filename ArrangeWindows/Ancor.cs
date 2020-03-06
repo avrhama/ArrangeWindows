@@ -8,25 +8,51 @@ namespace ArrangeWindows
 {
     public class Ancor
     {
+
         public Int16 Xoffset { set; get; }
+        //Xoffset=new Coordinate(0);
         public Int16 Yoffset { set; get; }
-        int x; int y;
+       // Yoffset=new Coordinate(0);
+        Coordinate x; Coordinate y;
         public int X
         {
             get
             {
-                return x + Xoffset;
+                return x.Value + Xoffset;
             }
             set
             {
-                x = value;
+                x.Value = value;
             }
         }
         public int Y
         {
             get
             {
-                return y + Yoffset;
+                return y.Value + Yoffset;
+            }
+            set
+            {
+                y.Value = value;
+            }
+        }
+
+        public Coordinate CoordinateX
+        {
+            get
+            {
+                return x;
+            }
+            set
+            {
+                x = value;
+            }
+        }
+        public Coordinate CoordinateY
+        {
+            get
+            {
+                return y;
             }
             set
             {
@@ -34,14 +60,59 @@ namespace ArrangeWindows
             }
         }
         
+        
         public Ancor(int x,int y)
         {
-            X = x;
-            Y = y;
+            CoordinateX = new Coordinate(x);
+            CoordinateY = new Coordinate(y);
+        }
+        public Ancor(Coordinate x, Coordinate y)
+        {
+            CoordinateX = x;
+            CoordinateY = y;
+        }
+        public Ancor(int x, Coordinate y)
+        {
+            CoordinateX = new Coordinate(x);
+            CoordinateY = y;
+        }
+        public Ancor(Coordinate x, int y)
+        {
+            CoordinateX = x;
+            CoordinateY = new Coordinate(y);
         }
         public Ancor copy()
         {
             return new Ancor(X, Y);
+        }
+        public Ancor setX(int x)
+        {
+            X = x;
+            return this;
+        }
+        public Ancor setY(int y)
+        {
+            Y = y;
+            return this;
+        }
+        public override string ToString()
+        {
+            return "(" + X + "," + Y + ")";
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != this.GetType())
+                return false;
+            Ancor a =(Ancor)obj;
+            return (x==a.x&&y==a.y);
+        }
+    }
+    public class Coordinate
+    {
+        public int Value { get; set; }
+        public Coordinate(int v)
+        {
+            Value = v;
         }
     }
    

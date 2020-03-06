@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ArrangeWindows.Enums;
 
 namespace ArrangeWindows
 {
@@ -147,7 +148,7 @@ namespace ArrangeWindows
             }
             else
             {
-                if (resized != null && resized.Parent!=null)
+                if (resized != null )
                 {
                     /*bool isFirst = resized.isFirst();
                     switch (arrowStatus)
@@ -169,8 +170,35 @@ namespace ArrangeWindows
 
 
                     }*/
-                    resized.TopLeft.X = e.X;
-                    resized.BottomLeft.X = e.X;
+                    switch (cursorStatus)
+                    {
+                        case CursorStatus.Left:
+                            resized.TopLeft.CoordinateX.Value = e.X;
+                            resized.BottomLeft.CoordinateX.Value = e.X;
+                          //  resized.setTopLeft(resized.TopLeft.setX(e.X));
+                           // resized.setBottomLeft(resized.BottomLeft.setX(e.X));
+                            break;
+                        case CursorStatus.Right:
+                            resized.TopRight.CoordinateX.Value = e.X;
+                            resized.BottomRight.CoordinateX.Value = e.X;
+                           // resized.setTopRight(resized.TopRight.setX(e.X));
+                          ///  resized.setBottomRight(resized.BottomRight.setX(e.X));
+                            break;
+                        case CursorStatus.Top:
+                            resized.TopLeft.CoordinateY.Value = e.Y;
+                            resized.TopRight.CoordinateY.Value = e.Y;
+                            // resized.setTopLeft(resized.TopLeft.setY(e.Y));
+                            // resized.setTopRight( resized.TopRight.setY(e.Y));
+                            break;
+                        case CursorStatus.Bottom:
+                            resized.BottomLeft.CoordinateY.Value = e.Y;
+                            resized.BottomRight.CoordinateY.Value = e.Y;
+                            // resized.setBottomLeft (resized.BottomLeft.setY(e.Y));
+                            // resized.setBottomRight(resized.BottomRight.setY(e.Y));
+                            break;
+
+                    }
+
 
 
                     resized = null;
@@ -188,7 +216,7 @@ namespace ArrangeWindows
        
             if (e.Button == MouseButtons.Left)
             {
-                if (arrowStatus != -1)
+                if (cursorStatus != CursorStatus.Default)
                 {
                     resized = focused;
                 }
@@ -218,7 +246,8 @@ namespace ArrangeWindows
             }
             
         }
-        int arrowStatus = -1;
+      
+        CursorStatus cursorStatus = CursorStatus.Default;
         public  void getFocusedScreenBoard(Point p)
         {
 
@@ -231,25 +260,29 @@ namespace ArrangeWindows
            
             if ((diff1 && diff2) || (diff3 && diff4))
             {
-                arrowStatus = (diff1 && diff2) ? 0 : 1;
+                cursorStatus = (diff1) ?CursorStatus.TopLeft : CursorStatus.BottomRight;
                 Cursor.Current = Cursors.SizeNWSE;
-            }   
+            }else if((diff1 && diff4) || (diff2 && diff3))
+            {
+                cursorStatus = (diff1) ? CursorStatus.BottomLeft : CursorStatus.TopRight;
+                Cursor.Current = Cursors.SizeNESW;
+            }
             else if (diff1 || diff3)
             {
-                arrowStatus = diff1 ? 2 : 3;
+                cursorStatus = diff1 ? CursorStatus.Left : CursorStatus.Right;
                 Cursor.Current = Cursors.SizeWE;
             }  
             else if (diff2 || diff4)
             {
-                arrowStatus = diff2 ? 4 : 5;
+                cursorStatus = diff2 ? CursorStatus.Top : CursorStatus.Bottom;
                 Cursor.Current = Cursors.SizeNS;
             }
             else
             {
-                arrowStatus = -1;
+                cursorStatus = CursorStatus.Default;
                 Cursor.Current = Cursors.Arrow;
             }
-            label1.Text = "Welcome to " + focused.Index+"\narrow:"+arrowStatus;
+            label1.Text = "Welcome to " + focused.Index+"\narrow:"+ cursorStatus;
          
 
         }
@@ -274,13 +307,15 @@ namespace ArrangeWindows
             Graphics g = scrnPanel.CreateGraphics();
             if (sb.First == null)
             {
-                //g.DrawRectangle(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.Size.Width, sb.Size.Height);
-                g.DrawLine(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.TopRight.X, sb.TopRight.Y);
+                g.DrawRectangle(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.BottomRight.X-sb.TopLeft.X, sb.BottomRight.Y - sb.TopLeft.Y);
+                /*g.DrawLine(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.TopRight.X, sb.TopRight.Y);
                 g.DrawLine(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.BottomLeft.X, sb.BottomLeft.Y);
                 g.DrawLine(Pens.Red, sb.TopRight.X, sb.TopRight.Y, sb.BottomRight.X, sb.BottomRight.Y);
-                g.DrawLine(Pens.Red, sb.BottomRight.X, sb.BottomRight.Y, sb.BottomLeft.X, sb.BottomLeft.Y);
+                g.DrawLine(Pens.Red, sb.BottomRight.X, sb.BottomRight.Y, sb.BottomLeft.X, sb.BottomLeft.Y);*/
                 // g.DrawRectangle(Pens.Red,)
                 g.DrawString(i.ToString(), f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 10);
+              //  string ancors = String.Format("tl:{0}  tr:{1}\nbl:{2}  br:{3}",sb.TopLeft,sb.TopRight,sb.BottomLeft,sb.BottomRight);
+                //g.DrawString(ancors, f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 40);
                 sb.Index = i;
                 return i + 1;
             }

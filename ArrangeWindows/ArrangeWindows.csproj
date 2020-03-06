@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ancor.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
