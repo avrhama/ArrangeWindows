@@ -107,7 +107,7 @@ namespace ArrangeWindows
             if (mi.Name == "v")
             {
                  sb = new ScreenBoard(splitPoint.X, selected.TopLeft.Y, selected.BottomRight.X, selected.BottomRight.Y);
-                ScreenBoard first = selected.addChild(sb, splitPoint.X, "v");
+                ScreenBoard first = selected.addChild(splitPoint.X,splitPoint.Y, "v");
                 // screenBoards[index] = first;
                 Point p = new Point(sb.BottomRight.X + 1, splitPoint.Y);
                 index = getScreenBoardIndexContainsPoint(p);
@@ -123,7 +123,7 @@ namespace ArrangeWindows
             else
             {
                  sb = new ScreenBoard(selected.TopLeft.X, splitPoint.Y, selected.BottomRight.X, selected.BottomRight.Y);
-                ScreenBoard first = selected.addChild(sb, splitPoint.Y, "h");
+                ScreenBoard first = selected.addChild(splitPoint.X, splitPoint.Y, "h");
               
                 // screenBoards[index] = first;
                 //screenBoards.Insert(index + 1, sb);
@@ -149,7 +149,7 @@ namespace ArrangeWindows
             {
                 if (resized != null && resized.Parent!=null)
                 {
-                    bool isFirst = resized.isFirst();
+                    /*bool isFirst = resized.isFirst();
                     switch (arrowStatus)
                     {
                         case 2:
@@ -166,11 +166,13 @@ namespace ArrangeWindows
                                 resized.Parent.Second.updateX(e.X, resized.Parent.Second.TopLeft.X, "TopLeft");
                             }
                             break;
-                       
 
-                    }
-                
-                    
+
+                    }*/
+                    resized.TopLeft.X = e.X;
+                    resized.BottomLeft.X = e.X;
+
+
                     resized = null;
                     //draw(screenBoards[0], 0);
                     scrnPanel.Invalidate();
@@ -180,8 +182,10 @@ namespace ArrangeWindows
             }
         }
         ScreenBoard resized;
+     
         public void MouseDownClicked(object sender, MouseEventArgs e)
         {
+       
             if (e.Button == MouseButtons.Left)
             {
                 if (arrowStatus != -1)
@@ -206,6 +210,12 @@ namespace ArrangeWindows
             }
             if (focused != null)
                 getFocusedScreenBoard(e.Location);
+            if (resized != null)
+            {
+                Graphics g = scrnPanel.CreateGraphics();
+                g.DrawLine(Pens.Blue, e.X, resized.TopLeft.Y, e.X, resized.TopRight.Y);
+                
+            }
             
         }
         int arrowStatus = -1;
@@ -264,7 +274,12 @@ namespace ArrangeWindows
             Graphics g = scrnPanel.CreateGraphics();
             if (sb.First == null)
             {
-                g.DrawRectangle(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.Size.Width, sb.Size.Height);
+                //g.DrawRectangle(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.Size.Width, sb.Size.Height);
+                g.DrawLine(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.TopRight.X, sb.TopRight.Y);
+                g.DrawLine(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.BottomLeft.X, sb.BottomLeft.Y);
+                g.DrawLine(Pens.Red, sb.TopRight.X, sb.TopRight.Y, sb.BottomRight.X, sb.BottomRight.Y);
+                g.DrawLine(Pens.Red, sb.BottomRight.X, sb.BottomRight.Y, sb.BottomLeft.X, sb.BottomLeft.Y);
+                // g.DrawRectangle(Pens.Red,)
                 g.DrawString(i.ToString(), f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 10);
                 sb.Index = i;
                 return i + 1;

@@ -27,7 +27,9 @@ namespace ArrangeWindows
         public ScreenBoard First { set; get; }
         public ScreenBoard Second { set; get; }
         private Ancor topLeft;
+        private Ancor topRight=new Ancor(0,0);
         private Ancor bottomRight;
+        private Ancor bottomLeft=new Ancor(0,0);
         private Size size;
         public Ancor TopLeft {
             get
@@ -37,7 +39,24 @@ namespace ArrangeWindows
             set
             {
                 size = new Size(bottomRight.X - value.X, bottomRight.Y - value.Y);
+                TopRight.X = value.X;
+                BottomLeft.X = value.X;
                 topLeft = value;
+            }
+        }
+        public Ancor TopRight
+        {
+            get
+            {
+                return topRight;
+            }
+            set
+            {
+                size = new Size(value.X - BottomLeft.X,value.Y- BottomLeft.Y);
+                TopLeft.Y = value.Y;
+                BottomRight.X = value.X;
+                TopRight = value;
+                
             }
         }
         public Ancor BottomRight {
@@ -48,7 +67,23 @@ namespace ArrangeWindows
             set
             {
                 size = new Size(value.X - TopLeft.X, value.Y - TopLeft.Y);
+                TopRight.X = value.X;
+                BottomLeft.Y = value.Y;
                 bottomRight = value;
+            }
+        }
+        public Ancor BottomLeft
+        {
+            get
+            {
+                return bottomLeft;
+            }
+            set
+            {
+                size = new Size(TopRight.X-value.X, TopRight.Y - value.Y);
+                TopLeft.X = value.X;
+                BottomRight.Y = value.Y;
+                bottomLeft = value;
             }
         }
         public Size Size
@@ -73,55 +108,72 @@ namespace ArrangeWindows
         public ScreenBoard(int x1,int y1,int x2,int y2)
         {
           topLeft = new Ancor(x1, y1);
-          bottomRight = new Ancor(x2, y2);
-          size = new Size(x2-x1, y2-y1);
+            topRight = new Ancor(x2, y1);
+            bottomRight = new Ancor(x2, y2);
+            bottomLeft = new Ancor(x1, y2);
+            size = new Size(x2-x1, y2-y1);
+          
         }
         public ScreenBoard(Ancor topLeft, Ancor bottomRight)
         {
             this.topLeft = new Ancor(topLeft.X, topLeft.Y);
+            topRight = new Ancor(BottomRight.X, topLeft.Y);
             this.bottomRight = new Ancor(bottomRight.X, bottomRight.Y);
+            bottomLeft = new Ancor(topLeft.X, bottomRight.Y);
             size = new Size(bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
         }
-        public ScreenBoard addChild(ScreenBoard second, int t, string type)
+        public ScreenBoard(Ancor topLeft,Ancor topRight,Ancor bottomRight,Ancor bottomLeft)
+        {
+            this.topLeft = topLeft;
+            this.topRight = topRight;
+            this.bottomRight = bottomRight;
+            this.bottomLeft = bottomLeft;
+            size = new Size(bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
+        }
+        //public ScreenBoard addChild(ScreenBoard second, int t, string type)
+        //{
+        //    ScreenBoard first;
+        //    if (type == "v")
+        //         first = new ScreenBoard(TopLeft, new Ancor(t, this.BottomRight.Y));
+
+        //    else
+        //        first = new ScreenBoard(TopLeft, new Ancor(this.BottomRight.X, t));
+        //    First = first;
+        //    first.Parent = this;
+        //    Second = second;
+        //    second.Parent = this;
+        //    return first;
+        //}
+        public ScreenBoard addChild(int x,int y, string type)
         {
             ScreenBoard first;
+            ScreenBoard second;
             if (type == "v")
             {
-                // first = new ScreenBoard(TopLeft, new Ancor(t, this.BottomRight.Y));
-                first = new ScreenBoard();
-                first.TopLeft = TopLeft;
-                first.BottomRight = new Ancor(t, this.BottomRight.Y);
+                //topright fot first and topleft for second.
+                Ancor a1 = new Ancor(x, TopLeft.Y);
+                //bottomright for first and bottomleft for second.
+                Ancor a2 = new Ancor(x, BottomLeft.Y);
+                first = new ScreenBoard(TopLeft, a1, a2, BottomLeft);
+                second = new ScreenBoard(a1, TopRight,BottomRight, a2);
+               
             }
-
             else
-                first = new ScreenBoard(TopLeft, new Ancor(this.BottomRight.X, t));
+            {
+                //bottomleft fot first and topleft for second.
+                Ancor a1 = new Ancor(BottomLeft.X, y);
+                //bottomright for first and topright for second.
+                Ancor a2 = new Ancor(BottomRight.X, y);
+                first = new ScreenBoard(TopLeft, TopRight, a2, a1);
+                second = new ScreenBoard(a1, a2, BottomRight, BottomLeft);
+            }
+                
             First = first;
             first.Parent = this;
             Second = second;
             second.Parent = this;
-            return first;
+            return First;
         }
-        /* public ScreenBoard addChild(Ancor ancorSplit,string type)
-         {
-             ScreenBoard first;
-             ScreenBoard second;
-             if (type == "v")
-             {
-                 second = new ScreenBoard(ancorSplit.X, selected.TopLeft.Y, selected.BottomRight.X, selected.BottomRight.Y);
-
-                 first = new ScreenBoard();
-                 first.TopLeft = TopLeft;
-                 first.BottomRight = new Ancor(t, this.BottomRight.Y);
-             }
-
-             else
-                 first = new ScreenBoard(TopLeft, new Ancor(this.BottomRight.X, t));
-             First = first;
-             first.Parent = this;
-             Second = second;
-             second.Parent = this;
-             return First;
-         }*/
         //update x propery's variable to new value of n
         public void updateX(int n, int m,string proertyName)
         {
