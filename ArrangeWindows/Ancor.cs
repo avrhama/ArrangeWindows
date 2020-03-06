@@ -95,6 +95,12 @@ namespace ArrangeWindows
             Y = y;
             return this;
         }
+        public void setXY(Ancor a)
+        {
+            X = a.X;
+            Y = a.Y;
+          
+        }
         public override string ToString()
         {
             return "(" + X + "," + Y + ")";
@@ -109,7 +115,29 @@ namespace ArrangeWindows
     }
     public class Coordinate
     {
-        public int Value { get; set; }
+        public Action CoordinateChanged;
+        int value_;
+        public int Value
+        {
+            get
+            {
+                return value_;
+            }
+            set
+            {
+                if (value != value_)
+                {
+                    value_ = value;
+                    CoordinateChanged?.Invoke();
+                }
+                else
+                {
+                    value_ = value;
+                }
+                  
+              
+            }
+        }
         public Coordinate(int v)
         {
             Value = v;

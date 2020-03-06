@@ -31,47 +31,47 @@ namespace ArrangeWindows
             })));
 
         }
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int Width, int Height, bool Repaint);
+
+
 
         private void Main_Load(object sender, EventArgs e)
         {
 
             LoadWindows();
         }
-        List<Window> wins = new List<Window>();
+        List<WindowItem> winItems = new List<WindowItem>();
         public void LoadWindows()
         {
             listBox1.Sorted = true;
-            IntPtr none = new IntPtr(0);
             foreach (Process p in Process.GetProcesses())
             {
                 try
                 {
                     // if (!winsNames.Contains(p.ProcessName))
                     //     continue;
-                    if (p.MainWindowHandle == none)
+                    if (p.MainWindowHandle.Equals(IntPtr.Zero))
                         continue;
 
                     Window win = new Window(p.MainWindowHandle, p.MainWindowTitle);
-                    bool exists = wins.Contains(win);
+                    bool exists = winItems.Exists(x=>x.Win.Equals(win));
                     if (!exists && winsNames.Contains(p.ProcessName))
                     {
+                        
                         Icon icon = Icon.ExtractAssociatedIcon(p.MainModule.FileName);
                         win.Icon = icon;
                         win.Name = p.ProcessName;
                         WindowItem winItem = new WindowItem(win);
                         winsLayout.Controls.Add(winItem);
-                        wins.Add(win);
-                        //listBox1.Items.Add(win);
+                        winItems.Add(winItem);
                     }
                     else if (exists)
                     {
                         // Window win_=wins.Find(x => x.Equals(win));
-                        wins.Find(x => x.Equals(win));
+                        WindowItem winItem = winItems.Find(x => x.Win.Equals(win));
+                        winItem.setTitle(win.Title);
                         // win_.Title = win.Title;
-                        WindowItem winItem;
-                        foreach (Control c in winsLayout.Controls)
+                        //WindowItem winItem;
+                      /*  foreach (Control c in winsLayout.Controls)
                         {
                            winItem = (WindowItem)c;
                             if (winItem.win.Equals(win))
@@ -81,7 +81,7 @@ namespace ArrangeWindows
                             }
                                 
 
-                        }
+                        }*/
                         // Control winItem =winsLayout.Controls.F
 
 
@@ -94,17 +94,75 @@ namespace ArrangeWindows
                 }
 
             }
-            int y = 0;
+
+            
+            foreach (WindowItem winItem in winItems)
+            {
+                scrnCtrl.screenBoardSelected -= winItem.screenBoardSelected;
+                scrnCtrl.screenBoardSelected += winItem.screenBoardSelected;
+            }
+
+
         }
 
+        
 
+
+        
+        public void getImage(IntPtr p)
+        {
+
+            
+
+            var r = new User32.WINDOWPLACEMENT();
+            User32.GetWindowPlacement(p,ref r);
+            var rect = r.rcNormalPosition;
+            int width =(int)Math.Floor((rect.right - rect.left) * 2.5);
+            int height = (int)Math.Floor((rect.bottom - rect.top) * 2.5);
+
+            //width=width*2;
+            // height = height*2;
+            Bitmap bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Graphics gfxBmp = Graphics.FromImage(bmp);
+            IntPtr hdcBitmap = gfxBmp.GetHdc();
+
+            bool restore = false; ;
+            User32.WindowState showCmd = (User32.WindowState)r.showCmd;
+            switch (showCmd)
+            {
+                case User32.WindowState.SW_HIDE:
+                case User32.WindowState.SW_MINIMIZE:
+                case User32.WindowState.SW_SHOWMINIMIZED:
+                    restore = true;
+                    break;
+            }
+            if (restore)
+            {
+                User32.ChangeTransparent(p);
+                User32.ShowWindow(p, (UInt32)User32.WindowState.SW_RESTORE);
+            }
+            User32.PrintWindow(p, hdcBitmap, 0);
+            if (restore)
+            {
+                User32.ShowWindow(p, r.showCmd);
+                User32.ChangeTransparent(p);
+            }
+
+            gfxBmp.ReleaseHdc(hdcBitmap);
+            gfxBmp.Dispose();
+
+            bmp.Save(@"C:\Users\Brain\Pictures\temp\vlc.png", System.Drawing.Imaging.ImageFormat.Png);
+           
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            Window win = (Window)listBox1.SelectedItem;
-            IntPtr p = win.Win;
-            MoveWindow(p, 0, 0, 1280, 720, true);
            
-            Text = p.ToString();
+
+            //Graphics g = CreateGraphics();
+
+            // MoveWindow(p, 0, 0, 1280, 720, true);
+
+            //Text = p.ToString();
         }
         BindingList<string> winsNames;
         private void addWinNameBtn_Click(object sender, EventArgs e)
@@ -117,8 +175,6 @@ namespace ArrangeWindows
                 updateFilterList();
                 LoadWindows();
             }
-
-
 
         }
 

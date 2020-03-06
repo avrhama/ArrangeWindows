@@ -35,7 +35,7 @@
             this.addWinNameBtn = new System.Windows.Forms.Button();
             this.winsLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.windowItem1 = new ArrangeWindows.WindowItem();
-            this.screenController1 = new ArrangeWindows.ScreenController();
+            this.scrnCtrl = new ArrangeWindows.ScreenController();
             this.updateWinsBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -96,16 +96,17 @@
             // 
             this.windowItem1.Location = new System.Drawing.Point(780, 949);
             this.windowItem1.Name = "windowItem1";
+            this.windowItem1.ScreenBoard = null;
             this.windowItem1.Size = new System.Drawing.Size(443, 51);
             this.windowItem1.TabIndex = 3;
             // 
-            // screenController1
+            // scrnCtrl
             // 
-            this.screenController1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.screenController1.Location = new System.Drawing.Point(74, 76);
-            this.screenController1.Name = "screenController1";
-            this.screenController1.Size = new System.Drawing.Size(1622, 836);
-            this.screenController1.TabIndex = 0;
+            this.scrnCtrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.scrnCtrl.Location = new System.Drawing.Point(74, 76);
+            this.scrnCtrl.Name = "scrnCtrl";
+            this.scrnCtrl.Size = new System.Drawing.Size(1622, 836);
+            this.scrnCtrl.TabIndex = 0;
             // 
             // updateWinsBtn
             // 
@@ -130,7 +131,7 @@
             this.Controls.Add(this.windowItem1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.screenController1);
+            this.Controls.Add(this.scrnCtrl);
             this.Name = "Main";
             this.Text = "Arrange Windows";
             this.Load += new System.EventHandler(this.Main_Load);
@@ -141,7 +142,7 @@
 
         #endregion
 
-        private ScreenController screenController1;
+        private ScreenController scrnCtrl;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button1;
         private WindowItem windowItem1;

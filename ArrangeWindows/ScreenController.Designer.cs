@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.scrnPanel = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.drawingTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // scrnPanel
             // 
             this.scrnPanel.Location = new System.Drawing.Point(26, 27);
             this.scrnPanel.Name = "scrnPanel";
-            this.scrnPanel.Size = new System.Drawing.Size(1377, 770);
+            this.scrnPanel.Size = new System.Drawing.Size(1152, 648);
             this.scrnPanel.TabIndex = 0;
             this.scrnPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownClicked);
             this.scrnPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MouseMoved);
@@ -62,6 +64,10 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
             // 
+            // drawingTimer
+            // 
+            this.drawingTimer.Tick += new System.EventHandler(this.drawingTimer_Tick);
+            // 
             // ScreenController
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -71,7 +77,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.scrnPanel);
             this.Name = "ScreenController";
-            this.Size = new System.Drawing.Size(1644, 834);
+            this.Size = new System.Drawing.Size(1644, 699);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -82,5 +88,6 @@
         private System.Windows.Forms.Panel scrnPanel;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Timer drawingTimer;
     }
 }

@@ -17,17 +17,28 @@ namespace ArrangeWindows
         List<ScreenBoard> screenBoards;
         //screenBoard split's menu to show when right button clicked.
         ContextMenu splitBoardMenu;
+       // public  EventHandler screenBoardSelected;
+        public event Action screenBoardSelected;
+        public static ScreenBoard selectedScreenBoard;
+        int index;
+
         public ScreenController()
         {
             InitializeComponent();
-
             screenBoards = new List<ScreenBoard>();
-            ScreenBoard sb1 = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
-
-            // ScreenBoard sb1 = new ScreenBoard(0, 0, (scrnPanel.Width - 1) / 2, scrnPanel.Height - 1);
-            ScreenBoard sb2 = new ScreenBoard((scrnPanel.Width - 1) / 2, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
-            screenBoards.Add(sb1);
-            //screenBoards.Add(sb2);
+            ScreenBoard sb = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
+            Monitor monitor;
+            monitor.index = 0;
+            monitor.Size = new Ancor(scrnPanel.Width, scrnPanel.Height);
+            monitor.Resolution = new Ancor(3840, 2160);
+            monitor.ScaleDown = Math.Min((float)monitor.Size.X / monitor.Resolution.X, (float)monitor.Size.Y / monitor.Resolution.Y);
+            monitor.ScaleUp = Math.Min(1/((float)monitor.Size.X / monitor.Resolution.X),1/( (float)monitor.Size.Y / monitor.Resolution.Y));
+            monitor.ScaleWidth = (float)monitor.Size.X / monitor.Resolution.X;
+            monitor.ScaleHeight = (float)monitor.Size.Y / monitor.Resolution.Y;
+            monitor.Draw = Draw;
+            monitor.DrawScreenBord = drawScreenBoard;
+            sb.Monitor = monitor;
+            screenBoards.Add(sb);
             screenBoards.Sort(ScreenBoard.compareScreenBoard);
             //initialize menu
             splitBoardMenu = new ContextMenu();
@@ -40,8 +51,9 @@ namespace ArrangeWindows
             splitBoardMenu.MenuItems.Add(horizionSplit);
             splitBoardMenu.MenuItems.Add(removeSplit);
             scrnPanel.Paint += DrawScreenBoards;
-
+            
         }
+
 
         //returns the screenBoard's index that contains the given point.
         public int getScreenBoardIndexContainsPoint(Point p)
@@ -94,48 +106,27 @@ namespace ArrangeWindows
 
             MenuItem mi = (MenuItem)sender;
             Point splitPoint = (Point)mi.Parent.Tag;
-            /*           int index=ScreenBoard.findScreenBoad(screenBoards, 0, screenBoards.Count-1, splitPoint);
-                        if (index < 0)
-                        {
-                           index = ScreenBoard.findScreenBoad(screenBoards, 0, screenBoards.Count-1, splitPoint);
-                        }*/
-            int index = getScreenBoardIndexContainsPoint(splitPoint);
-
-
-            ScreenBoard selected = screenBoards[index];
-            selected = getScreenBoardContainsPoint(screenBoards[0], splitPoint);
+            ScreenBoard selected = getScreenBoardContainsPoint(screenBoards[0], splitPoint);
+      
             ScreenBoard sb;
             if (mi.Name == "v")
             {
                  sb = new ScreenBoard(splitPoint.X, selected.TopLeft.Y, selected.BottomRight.X, selected.BottomRight.Y);
-                ScreenBoard first = selected.addChild(splitPoint.X,splitPoint.Y, "v");
-                // screenBoards[index] = first;
-                Point p = new Point(sb.BottomRight.X + 1, splitPoint.Y);
-                index = getScreenBoardIndexContainsPoint(p);
-                
-                /*  if (index == -1)
-                      screenBoards.Add(sb);
-                  else
-                  {
-                      screenBoards.Insert(index, sb);
-                  }*/
+               selected.addChild(splitPoint.X,splitPoint.Y, "v");
 
             }
             else
             {
                  sb = new ScreenBoard(selected.TopLeft.X, splitPoint.Y, selected.BottomRight.X, selected.BottomRight.Y);
-                ScreenBoard first = selected.addChild(splitPoint.X, splitPoint.Y, "h");
-              
-                // screenBoards[index] = first;
-                //screenBoards.Insert(index + 1, sb);
+               selected.addChild(splitPoint.X, splitPoint.Y, "h");
             }
-            //MessageBox.Show(index.ToString());
             screenBoards.Sort(ScreenBoard.compareScreenBoard);
           scrnPanel.Invalidate();
-          //draw(screenBoards[0], 0);
             focused = sb;
             getFocusedScreenBoard(splitPoint);
 
+            WindowItem.selectedScreenBoard = selected;
+            screenBoardSelected?.Invoke();
         }
         public void MouseUpClicked(object sender, MouseEventArgs e)
         {
@@ -150,67 +141,41 @@ namespace ArrangeWindows
             {
                 if (resized != null )
                 {
-                    /*bool isFirst = resized.isFirst();
-                    switch (arrowStatus)
-                    {
-                        case 2:
-                            resized.updateX(e.X, resized.TopLeft.X, "TopLeft");
-                            if (!isFirst)
-                            {
-                                resized.Parent.First.updateX(e.X, resized.Parent.First.BottomRight.X, "BottomRight");
-                            }
-                            break;
-                        case 3:
-                            resized.updateX(e.X, resized.BottomRight.X, "BottomRight");
-                            if (isFirst)
-                            {
-                                resized.Parent.Second.updateX(e.X, resized.Parent.Second.TopLeft.X, "TopLeft");
-                            }
-                            break;
-
-
-                    }*/
+                   
                     switch (cursorStatus)
                     {
                         case CursorStatus.Left:
                             resized.TopLeft.CoordinateX.Value = e.X;
                             resized.BottomLeft.CoordinateX.Value = e.X;
-                          //  resized.setTopLeft(resized.TopLeft.setX(e.X));
-                           // resized.setBottomLeft(resized.BottomLeft.setX(e.X));
                             break;
                         case CursorStatus.Right:
                             resized.TopRight.CoordinateX.Value = e.X;
                             resized.BottomRight.CoordinateX.Value = e.X;
-                           // resized.setTopRight(resized.TopRight.setX(e.X));
-                          ///  resized.setBottomRight(resized.BottomRight.setX(e.X));
                             break;
                         case CursorStatus.Top:
                             resized.TopLeft.CoordinateY.Value = e.Y;
                             resized.TopRight.CoordinateY.Value = e.Y;
-                            // resized.setTopLeft(resized.TopLeft.setY(e.Y));
-                            // resized.setTopRight( resized.TopRight.setY(e.Y));
                             break;
                         case CursorStatus.Bottom:
                             resized.BottomLeft.CoordinateY.Value = e.Y;
                             resized.BottomRight.CoordinateY.Value = e.Y;
-                            // resized.setBottomLeft (resized.BottomLeft.setY(e.Y));
-                            // resized.setBottomRight(resized.BottomRight.setY(e.Y));
                             break;
 
                     }
-
-
-
                     resized = null;
-                    //draw(screenBoards[0], 0);
+
+                    resized?.WindowItem.setWinPreview();
                     scrnPanel.Invalidate();
-                   
+                }
+                else
+                {
+                    WindowItem.selectedScreenBoard = getScreenBoardContainsPoint(screenBoards[0],e.Location);
+                    screenBoardSelected?.Invoke();
                 }
 
             }
         }
         ScreenBoard resized;
-     
         public void MouseDownClicked(object sender, MouseEventArgs e)
         {
        
@@ -219,7 +184,23 @@ namespace ArrangeWindows
                 if (cursorStatus != CursorStatus.Default)
                 {
                     resized = focused;
+                   /* switch (cursorStatus)
+                    {
+                        case CursorStatus.Left:
+                        case CursorStatus.Right:
+                            borderP1 = new Ancor(e.X, resized.TopLeft.Y);
+                            borderP2 = new Ancor(e.X, resized.BottomLeft.Y);
+                            break;
+                        case CursorStatus.Top:
+                        case CursorStatus.Bottom:
+                            borderP1 = new Ancor(resized.TopLeft.X, e.Y);
+                            borderP2 = new Ancor(resized.TopRight.X, e.Y);
+                            break;
+
+                    }*/
                 }
+          
+                //Invalidate();
 
                 
             }
@@ -240,11 +221,48 @@ namespace ArrangeWindows
                 getFocusedScreenBoard(e.Location);
             if (resized != null)
             {
-                Graphics g = scrnPanel.CreateGraphics();
-                g.DrawLine(Pens.Blue, e.X, resized.TopLeft.Y, e.X, resized.TopRight.Y);
-                
+                if (!drawing)
+                    return;
+                else
+                {
+                    drawing = false;
+                    drawingTimer.Start();
+                }
+               // Graphics g = scrnPanel.CreateGraphics();
+                //g.Clip = new Region(new Rectangle(resized.TopLeft.X, resized.TopLeft.Y+1, resized.BottomRight.X - resized.TopLeft.X, resized.BottomRight.Y - resized.TopLeft.Y-1));
+                //g.Clear(BackColor);
+                switch (cursorStatus)
+                {
+                    case CursorStatus.Left:
+                        resized.TopLeft.X = e.X;
+                        break;
+                    case CursorStatus.Right:
+                       
+                       // borderP1.X = e.X;
+                        //borderP2.X = e.X;
+                        resized.TopRight.X = e.X;
+                        break;
+                    case CursorStatus.Top:
+                        resized.TopRight.Y = e.Y;
+                        break;
+                    case CursorStatus.Bottom:
+                        resized.BottomRight.Y = e.Y;
+                        break;
+
+                }
+                //Graphics g = scrnPanel.CreateGraphics();
+                //g.Clip = new Region(new Rectangle(borderP1.X, borderP1.Y, 1, borderP2.Y - borderP1.Y));
+                //scrnPanel.Invalidate();
+                //drawBorderLine();
+                /*                g.Clear(BackColor);
+                                g = scrnPanel.CreateGraphics();
+                                if (borderP1 != null)
+                                {
+                                    g.DrawLine(Pens.Blue, borderP1.X, borderP1.Y, borderP2.X, borderP2.Y);
+
+                                }*/
             }
-            
+
         }
       
         CursorStatus cursorStatus = CursorStatus.Default;
@@ -286,11 +304,11 @@ namespace ArrangeWindows
          
 
         }
-        Font f = new Font(FontFamily.GenericSansSerif, 12);
+        Font f = new Font(FontFamily.GenericSansSerif, 8);
         protected void DrawScreenBoards(object sender, PaintEventArgs e)
         {
             //Graphics g = e.Graphics;
-            draw(screenBoards[0],0);
+            Draw();
 
             return;
             Graphics g = e.Graphics;
@@ -302,36 +320,114 @@ namespace ArrangeWindows
             }
 
         }
-        public int draw( ScreenBoard sb,int i)
+        Ancor borderP1=null;
+        Ancor borderP2 = null;
+        public void Draw()
         {
             Graphics g = scrnPanel.CreateGraphics();
+            g.Clear(BackColor);
+            drawScreenBoards(screenBoards[0],g);
+           /* if (borderP1 != null)
+            {
+                g.DrawLine(Pens.Blue, borderP1.X, borderP1.Y, borderP2.X, borderP2.Y);
+
+            }*/
+
+        }
+        public void drawBorderLine()
+        {
+            /*Graphics g = scrnPanel.CreateGraphics();
+            g.Clip = new Region(new Rectangle(,));
+            g.Clear(BackColor);
+
+            if (borderP1 != null)
+            {
+                g.DrawLine(Pens.Blue, borderP1.X, borderP1.Y, borderP2.X, borderP2.Y);
+
+            }*/
+        }
+        public void drawScreenBoard(ScreenBoard sb)
+        {
+
+            Graphics g = scrnPanel.CreateGraphics();
+
             if (sb.First == null)
             {
-                g.DrawRectangle(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.BottomRight.X-sb.TopLeft.X, sb.BottomRight.Y - sb.TopLeft.Y);
+
+                if (sb.WindowItem != null)
+                {
+                    g.DrawImage(sb.WindowItem.Preview, sb.TopLeft.X, sb.TopLeft.Y, sb.WindowItem.Preview.Width, sb.WindowItem.Preview.Height);
+                }
+                else
+                {
+                    g.DrawString(sb.Index.ToString(), f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 10);
+                }
+                g.DrawRectangle(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.BottomRight.X - sb.TopLeft.X, sb.BottomRight.Y - sb.TopLeft.Y);
+
+            }
+           
+
+        }
+        public int drawScreenBoards( ScreenBoard sb, Graphics g,int i=0)
+        {
+            
+            if (sb.First == null)
+            {
                 /*g.DrawLine(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.TopRight.X, sb.TopRight.Y);
                 g.DrawLine(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.BottomLeft.X, sb.BottomLeft.Y);
                 g.DrawLine(Pens.Red, sb.TopRight.X, sb.TopRight.Y, sb.BottomRight.X, sb.BottomRight.Y);
                 g.DrawLine(Pens.Red, sb.BottomRight.X, sb.BottomRight.Y, sb.BottomLeft.X, sb.BottomLeft.Y);*/
                 // g.DrawRectangle(Pens.Red,)
-                g.DrawString(i.ToString(), f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 10);
-              //  string ancors = String.Format("tl:{0}  tr:{1}\nbl:{2}  br:{3}",sb.TopLeft,sb.TopRight,sb.BottomLeft,sb.BottomRight);
-                //g.DrawString(ancors, f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 40);
+                
+                if (sb.WindowItem != null)
+                {
+                    g.DrawImage(sb.WindowItem.Preview, sb.TopLeft.X, sb.TopLeft.Y, sb.WindowItem.Preview.Width, sb.WindowItem.Preview.Height);
+                   // g.DrawString(sb.WindowItem.Win.Name, f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 40);
+                }
+                else
+                {
+                    g.DrawString(i.ToString(), f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 10);
+                }
+                g.DrawRectangle(Pens.Red, sb.TopLeft.X, sb.TopLeft.Y, sb.BottomRight.X - sb.TopLeft.X, sb.BottomRight.Y - sb.TopLeft.Y);
+
+                  string ancors = String.Format("tl:{0}  tr:{1}\nbl:{2}  br:{3}",sb.TopLeft,sb.TopRight,sb.BottomLeft,sb.BottomRight);
+                g.DrawString(ancors, f, Brushes.Red, sb.TopLeft.X + 10, sb.TopLeft.Y + 40);
                 sb.Index = i;
                 return i + 1;
             }
             else
             {
-              int j=  draw(sb.First, i);
+              int j=  drawScreenBoards(sb.First,  g,i);
 
-              return draw(sb.Second, j);
+              return drawScreenBoards(sb.Second, g,j);
             }
            
         }
-
+        public struct Monitor
+        {
+            public int index;
+            //screencontroller control size.
+            public Ancor Size;
+            //monitor resolution.
+            public Ancor Resolution;
+            //scale.
+            public float ScaleDown;
+            public float ScaleUp;
+            public float ScaleWidth;
+            public float ScaleHeight;
+            public Action Draw;
+            public Action<ScreenBoard> DrawScreenBord;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             screenBoards.Sort(ScreenBoard.compareScreenBoard);
             scrnPanel.Invalidate();
+        }
+        bool drawing = true;
+        private void drawingTimer_Tick(object sender, EventArgs e)
+        {
+            drawing = true;
+            drawingTimer.Stop();
         }
     }
 }
