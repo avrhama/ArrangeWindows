@@ -31,12 +31,12 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.addWinTxt = new System.Windows.Forms.TextBox();
-            this.filteredWinsList = new System.Windows.Forms.ListBox();
+            this.favoritesWinsList = new System.Windows.Forms.ListBox();
             this.addWinNameBtn = new System.Windows.Forms.Button();
             this.winsLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.windowItem1 = new ArrangeWindows.WindowItem();
-            this.scrnCtrl = new ArrangeWindows.ScreenController();
             this.updateWinsBtn = new System.Windows.Forms.Button();
+            this.scrnCtrl = new ArrangeWindows.ScreenController();
+            this.showAllCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // listBox1
@@ -67,13 +67,13 @@
             // 
             // filteredWinsList
             // 
-            this.filteredWinsList.FormattingEnabled = true;
-            this.filteredWinsList.ItemHeight = 31;
-            this.filteredWinsList.Location = new System.Drawing.Point(2361, 149);
-            this.filteredWinsList.Name = "filteredWinsList";
-            this.filteredWinsList.Size = new System.Drawing.Size(273, 221);
-            this.filteredWinsList.TabIndex = 5;
-            this.filteredWinsList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.filterListMouseUp);
+            this.favoritesWinsList.FormattingEnabled = true;
+            this.favoritesWinsList.ItemHeight = 31;
+            this.favoritesWinsList.Location = new System.Drawing.Point(2361, 149);
+            this.favoritesWinsList.Name = "filteredWinsList";
+            this.favoritesWinsList.Size = new System.Drawing.Size(273, 221);
+            this.favoritesWinsList.TabIndex = 5;
+            this.favoritesWinsList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.filterListMouseUp);
             // 
             // addWinNameBtn
             // 
@@ -87,26 +87,11 @@
             // 
             // winsLayout
             // 
+            this.winsLayout.AutoScroll = true;
             this.winsLayout.Location = new System.Drawing.Point(1738, 76);
             this.winsLayout.Name = "winsLayout";
-            this.winsLayout.Size = new System.Drawing.Size(513, 836);
+            this.winsLayout.Size = new System.Drawing.Size(591, 836);
             this.winsLayout.TabIndex = 7;
-            // 
-            // windowItem1
-            // 
-            this.windowItem1.Location = new System.Drawing.Point(780, 949);
-            this.windowItem1.Name = "windowItem1";
-            this.windowItem1.ScreenBoard = null;
-            this.windowItem1.Size = new System.Drawing.Size(443, 51);
-            this.windowItem1.TabIndex = 3;
-            // 
-            // scrnCtrl
-            // 
-            this.scrnCtrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.scrnCtrl.Location = new System.Drawing.Point(74, 76);
-            this.scrnCtrl.Name = "scrnCtrl";
-            this.scrnCtrl.Size = new System.Drawing.Size(1622, 836);
-            this.scrnCtrl.TabIndex = 0;
             // 
             // updateWinsBtn
             // 
@@ -118,17 +103,36 @@
             this.updateWinsBtn.UseVisualStyleBackColor = true;
             this.updateWinsBtn.Click += new System.EventHandler(this.updateWinsBtn_Click);
             // 
+            // scrnCtrl
+            // 
+            this.scrnCtrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.scrnCtrl.Location = new System.Drawing.Point(74, 76);
+            this.scrnCtrl.Name = "scrnCtrl";
+            this.scrnCtrl.Size = new System.Drawing.Size(1622, 836);
+            this.scrnCtrl.TabIndex = 0;
+            // 
+            // showAllCheck
+            // 
+            this.showAllCheck.AutoSize = true;
+            this.showAllCheck.Location = new System.Drawing.Point(1738, 919);
+            this.showAllCheck.Name = "showAllCheck";
+            this.showAllCheck.Size = new System.Drawing.Size(156, 36);
+            this.showAllCheck.TabIndex = 9;
+            this.showAllCheck.Text = "show all";
+            this.showAllCheck.UseVisualStyleBackColor = true;
+            this.showAllCheck.CheckedChanged += new System.EventHandler(this.showAllCheck_CheckedChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2944, 1067);
+            this.Controls.Add(this.showAllCheck);
             this.Controls.Add(this.updateWinsBtn);
             this.Controls.Add(this.winsLayout);
             this.Controls.Add(this.addWinNameBtn);
-            this.Controls.Add(this.filteredWinsList);
+            this.Controls.Add(this.favoritesWinsList);
             this.Controls.Add(this.addWinTxt);
-            this.Controls.Add(this.windowItem1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.scrnCtrl);
@@ -145,12 +149,12 @@
         private ScreenController scrnCtrl;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button1;
-        private WindowItem windowItem1;
         private System.Windows.Forms.TextBox addWinTxt;
-        private System.Windows.Forms.ListBox filteredWinsList;
+        private System.Windows.Forms.ListBox favoritesWinsList;
         private System.Windows.Forms.Button addWinNameBtn;
         private System.Windows.Forms.FlowLayoutPanel winsLayout;
         private System.Windows.Forms.Button updateWinsBtn;
+        private System.Windows.Forms.CheckBox showAllCheck;
     }
 }
 

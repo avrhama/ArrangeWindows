@@ -28,52 +28,61 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.windowIconPic = new System.Windows.Forms.PictureBox();
             this.windowTitleLbl = new System.Windows.Forms.Label();
-            this.addWindowPic = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.windowIconPic)).BeginInit();
+            this.addWindowPic = new ArrangeWindows.WindowButton();
+            this.windowIconPic = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.addWindowPic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.windowIconPic)).BeginInit();
             this.SuspendLayout();
             // 
-            // windowIconPic
-            // 
-            this.windowIconPic.Location = new System.Drawing.Point(0, 0);
-            this.windowIconPic.Name = "windowIconPic";
-            this.windowIconPic.Size = new System.Drawing.Size(48, 48);
-            this.windowIconPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.windowIconPic.TabIndex = 0;
-            this.windowIconPic.TabStop = false;
-            // 
-            // windowNameLbl
+            // windowTitleLbl
             // 
             this.windowTitleLbl.AutoSize = true;
-            this.windowTitleLbl.Location = new System.Drawing.Point(81, 9);
-            this.windowTitleLbl.Name = "windowNameLbl";
+            this.windowTitleLbl.BackColor = System.Drawing.Color.Transparent;
+            this.windowTitleLbl.Location = new System.Drawing.Point(96, 21);
+            this.windowTitleLbl.Name = "windowTitleLbl";
             this.windowTitleLbl.Size = new System.Drawing.Size(93, 32);
             this.windowTitleLbl.TabIndex = 1;
             this.windowTitleLbl.Text = "label1";
             // 
             // addWindowPic
             // 
-            this.addWindowPic.Image = global::ArrangeWindows.Resource1.Add_icon;
-            this.addWindowPic.Location = new System.Drawing.Point(374, 0);
+            this.addWindowPic.BackColor = System.Drawing.Color.Transparent;
+            this.addWindowPic.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.addWindowPic.Image = global::ArrangeWindows.Resource1.addWindowOff;
+            this.addWindowPic.Location = new System.Drawing.Point(400, 9);
             this.addWindowPic.Name = "addWindowPic";
             this.addWindowPic.Size = new System.Drawing.Size(48, 48);
             this.addWindowPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.addWindowPic.TabIndex = 2;
             this.addWindowPic.TabStop = false;
+            this.addWindowPic.Tag = "a";
+            this.addWindowPic.Type = ArrangeWindows.WindowButtonType.Add;
+            // 
+            // windowIconPic
+            // 
+            this.windowIconPic.BackColor = System.Drawing.Color.Transparent;
+            this.windowIconPic.Location = new System.Drawing.Point(32, 9);
+            this.windowIconPic.Name = "windowIconPic";
+            this.windowIconPic.Size = new System.Drawing.Size(48, 48);
+            this.windowIconPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.windowIconPic.TabIndex = 0;
+            this.windowIconPic.TabStop = false;
             // 
             // WindowItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = global::ArrangeWindows.Resource1.windowCaseOff;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Controls.Add(this.addWindowPic);
             this.Controls.Add(this.windowTitleLbl);
             this.Controls.Add(this.windowIconPic);
+            this.DoubleBuffered = true;
             this.Name = "WindowItem";
-            this.Size = new System.Drawing.Size(443, 51);
-            ((System.ComponentModel.ISupportInitialize)(this.windowIconPic)).EndInit();
+            this.Size = new System.Drawing.Size(474, 71);
             ((System.ComponentModel.ISupportInitialize)(this.addWindowPic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.windowIconPic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,6 +92,6 @@
 
         private System.Windows.Forms.PictureBox windowIconPic;
         private System.Windows.Forms.Label windowTitleLbl;
-        private System.Windows.Forms.PictureBox addWindowPic;
+        private WindowButton addWindowPic;
     }
 }

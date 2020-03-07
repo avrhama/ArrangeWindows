@@ -72,6 +72,9 @@
     </Compile>
     <Compile Include="SerializeModel.cs" />
     <Compile Include="User32.cs" />
+    <Compile Include="WindowButton1.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WindowItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -118,6 +121,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Remove-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\windowCase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addWindowOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addWindowOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\removeOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\removeOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\windowCaseOff.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

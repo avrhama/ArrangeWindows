@@ -14,20 +14,20 @@ namespace ArrangeWindows
 {
     public partial class Main : Form
     {
-        ContextMenu filteredWinNamesMenu;
+        ContextMenu favoritesWinsMenu;
         public Main()
         {
             InitializeComponent();
             if (System.IO.File.Exists(Environment.CurrentDirectory + @"\filteredList.bin"))
-                winsNames = SerializeModel.DeSerializeObject<BindingList<string>>(Environment.CurrentDirectory + @"\filteredList.bin");
+                favoritesWins = SerializeModel.DeSerializeObject<BindingList<string>>(Environment.CurrentDirectory + @"\filteredList.bin");
             else
-                winsNames = new BindingList<string>();
-            filteredWinsList.DataSource = winsNames;
-            filteredWinNamesMenu = new ContextMenu();
-            filteredWinNamesMenu.MenuItems.Add(new MenuItem("remove", new EventHandler((object sender, EventArgs e) =>
+                favoritesWins = new BindingList<string>();
+            favoritesWinsList.DataSource = favoritesWins;
+            favoritesWinsMenu = new ContextMenu();
+            favoritesWinsMenu.MenuItems.Add(new MenuItem("remove", new EventHandler((object sender, EventArgs e) =>
             {
-                winsNames.Remove(filteredWinsList.SelectedItem.ToString());
-                updateFilterList();
+                favoritesWins.Remove(favoritesWinsList.SelectedItem.ToString());
+                updateFavoritesList();
             })));
 
         }
@@ -53,38 +53,35 @@ namespace ArrangeWindows
                         continue;
 
                     Window win = new Window(p.MainWindowHandle, p.MainWindowTitle);
-                    bool exists = winItems.Exists(x=>x.Win.Equals(win));
-                    if (!exists && winsNames.Contains(p.ProcessName))
+                   // bool exists = winItems.Exists(x=>x.Win.Equals(win));
+                    WindowItem existsWinItm = winItems.Find(x => x.Win.Equals(win));
+                    bool favorite = favoritesWins.Contains(p.ProcessName);
+                    if (existsWinItm==null && (showAllCheck.Checked||favorite))
                     {
                         
                         Icon icon = Icon.ExtractAssociatedIcon(p.MainModule.FileName);
                         win.Icon = icon;
                         win.Name = p.ProcessName;
-                        WindowItem winItem = new WindowItem(win);
+                        WindowItem winItem = new WindowItem(win, favorite);
+                        winItem.AddFavoritEvent += addFavorite;
                         winsLayout.Controls.Add(winItem);
                         winItems.Add(winItem);
+                        p.EnableRaisingEvents = true;
+                        p.Exited += windowClosed;
                     }
-                    else if (exists)
+                    else if (existsWinItm!=null)
                     {
-                        // Window win_=wins.Find(x => x.Equals(win));
-                        WindowItem winItem = winItems.Find(x => x.Win.Equals(win));
-                        winItem.setTitle(win.Title);
-                        // win_.Title = win.Title;
-                        //WindowItem winItem;
-                      /*  foreach (Control c in winsLayout.Controls)
-                        {
-                           winItem = (WindowItem)c;
-                            if (winItem.win.Equals(win))
+                        if (!showAllCheck.Checked)
+                            if (!favoritesWins.Contains(p.ProcessName))
                             {
-                                winItem.setTitle(win.Title);
-                                break;
+                                winItems.Remove(existsWinItm);
+                                winsLayout.Controls.Remove(existsWinItm);
+
+                                continue;
                             }
                                 
-
-                        }*/
-                        // Control winItem =winsLayout.Controls.F
-
-
+                        WindowItem winItem = winItems.Find(x => x.Win.Equals(win));
+                        winItem.setTitle(win.Title);
                     }
 
                 }
@@ -105,55 +102,18 @@ namespace ArrangeWindows
 
         }
 
-        
-
-
-        
-        public void getImage(IntPtr p)
+        private void windowClosed(object sender, EventArgs e)
         {
-
+            Process p = (Process)sender;
+            Window win = new Window(p.MainWindowHandle, p.ProcessName);
             
-
-            var r = new User32.WINDOWPLACEMENT();
-            User32.GetWindowPlacement(p,ref r);
-            var rect = r.rcNormalPosition;
-            int width =(int)Math.Floor((rect.right - rect.left) * 2.5);
-            int height = (int)Math.Floor((rect.bottom - rect.top) * 2.5);
-
-            //width=width*2;
-            // height = height*2;
-            Bitmap bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            Graphics gfxBmp = Graphics.FromImage(bmp);
-            IntPtr hdcBitmap = gfxBmp.GetHdc();
-
-            bool restore = false; ;
-            User32.WindowState showCmd = (User32.WindowState)r.showCmd;
-            switch (showCmd)
+            WindowItem existsWinItm = winItems.Find(x => x.Win.Equals(win));
+            if(existsWinItm!=null)
             {
-                case User32.WindowState.SW_HIDE:
-                case User32.WindowState.SW_MINIMIZE:
-                case User32.WindowState.SW_SHOWMINIMIZED:
-                    restore = true;
-                    break;
+                winsLayout.Controls.Remove(existsWinItm);
             }
-            if (restore)
-            {
-                User32.ChangeTransparent(p);
-                User32.ShowWindow(p, (UInt32)User32.WindowState.SW_RESTORE);
-            }
-            User32.PrintWindow(p, hdcBitmap, 0);
-            if (restore)
-            {
-                User32.ShowWindow(p, r.showCmd);
-                User32.ChangeTransparent(p);
-            }
-
-            gfxBmp.ReleaseHdc(hdcBitmap);
-            gfxBmp.Dispose();
-
-            bmp.Save(@"C:\Users\Brain\Pictures\temp\vlc.png", System.Drawing.Imaging.ImageFormat.Png);
-           
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
            
@@ -164,36 +124,58 @@ namespace ArrangeWindows
 
             //Text = p.ToString();
         }
-        BindingList<string> winsNames;
+        BindingList<string> favoritesWins;
         private void addWinNameBtn_Click(object sender, EventArgs e)
         {
 
             string winName = addWinTxt.Text.Trim();
-            if (!winsNames.Contains(winName))
+            if (!favoritesWins.Contains(winName))
             {
-                winsNames.Add(winName);
-                updateFilterList();
+                favoritesWins.Add(winName);
+                updateFavoritesList();
                 LoadWindows();
             }
 
         }
+        public void addFavorite(WindowItem winItem,bool favorite)
+        {
+            if (favorite)
+            {
+                favoritesWins.Remove(winItem.Win.Name);
+                if(!showAllCheck.Checked)
+                LoadWindows();
+            }
+            else
+            {
+                winItem.Favorite = true;
+               favoritesWins.Add(winItem.Win.Name);
 
+            }
+            updateFavoritesList();
+
+        }
         private void filterListMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (filteredWinsList.SelectedItem != null)
-                    filteredWinNamesMenu.Show(filteredWinsList, e.Location);
+                if (favoritesWinsList.SelectedItem != null)
+                    favoritesWinsMenu.Show(favoritesWinsList, e.Location);
             }
 
         }
-        public void updateFilterList()
+        public void updateFavoritesList()
         {
-            SerializeModel.SerializeObject<BindingList<string>>(winsNames, Environment.CurrentDirectory + @"\filteredList.bin");
+            SerializeModel.SerializeObject<BindingList<string>>(favoritesWins, Environment.CurrentDirectory + @"\filteredList.bin");
         }
 
         private void updateWinsBtn_Click(object sender, EventArgs e)
         {
+            LoadWindows();
+        }
+
+        private void showAllCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            
             LoadWindows();
         }
     }

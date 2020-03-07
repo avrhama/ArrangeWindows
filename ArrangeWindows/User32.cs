@@ -95,11 +95,11 @@ namespace ArrangeWindows
                     restore = true;
                     break;
             }
-            if (restore)
-            {
+           // if (restore)
+            //{
                 User32.ChangeTransparent(p);
                 User32.ShowWindow(p, (UInt32)User32.WindowState.SW_RESTORE);
-            }
+            //}
 
             Bitmap bmp = new Bitmap((int)(factor*w),(int)(factor*h), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             Graphics gfxBmp = Graphics.FromImage(bmp);
@@ -107,11 +107,11 @@ namespace ArrangeWindows
             User32.MoveWindow(p, x, y, w, h, true);
             User32.PrintWindow(p, hdcBitmap, 0);
             User32.MoveWindow(p,rect.left, rect.top, width, height, true);
-            if (restore)
-            {
+          //  if (restore)
+           // {
                 User32.ShowWindow(p, r.showCmd);
                 User32.ChangeTransparent(p);
-            }
+            //}
 
             gfxBmp.ReleaseHdc(hdcBitmap);
             gfxBmp.Dispose();
