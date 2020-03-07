@@ -19,24 +19,31 @@ namespace ArrangeWindows
         ContextMenu splitBoardMenu;
         public event Action screenBoardSelected;
         public static ScreenBoard selectedScreenBoard;
-        int index;
+        int monitorIndex;
 
-        public ScreenController()
+        public ScreenController(Screen screen,string name,int index)
         {
             InitializeComponent();
             screenBoards = new List<ScreenBoard>();
+            scrnCtrlNameLbl.Text = name;
+            monitorIndex = index;
             ScreenBoard sb = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
             Monitor monitor;
-            monitor.index = 0;
+            monitor.Index = index;
             monitor.Size = new Ancor(scrnPanel.Width, scrnPanel.Height);
             monitor.Resolution = new Ancor(3840, 2160);
+            monitor.Resolution = new Ancor(screen.Bounds.Width, screen.Bounds.Height);
+
             monitor.ScaleDown = Math.Min((float)monitor.Size.X / monitor.Resolution.X, (float)monitor.Size.Y / monitor.Resolution.Y);
             monitor.ScaleUp = Math.Min(1/((float)monitor.Size.X / monitor.Resolution.X),1/( (float)monitor.Size.Y / monitor.Resolution.Y));
             monitor.ScaleWidth = (float)monitor.Size.X / monitor.Resolution.X;
             monitor.ScaleHeight = (float)monitor.Size.Y / monitor.Resolution.Y;
             monitor.Draw = Draw;
+            monitor.DrawScreenBoard = drawScreenBoard;
+            monitor.X = screen.Bounds.X;
+            monitor.Y = screen.Bounds.Y;
             sb.Monitor = monitor;
-            selected = sb;
+            selectedScreenBoard = sb;
             screenBoards.Add(sb);
             screenBoards.Sort(ScreenBoard.compareScreenBoard);
             //initialize menu
@@ -175,7 +182,6 @@ namespace ArrangeWindows
             }
         }
         ScreenBoard resized;
-        ScreenBoard selected;
         public void MouseDownClicked(object sender, MouseEventArgs e)
         {
        
@@ -185,9 +191,10 @@ namespace ArrangeWindows
                 {
                     resized = focused;
                 }
-                drawScreenBoard(selected, Pens.Red);
-                selected = focused;
-                drawScreenBoard(selected, Pens.Blue);
+               // drawScreenBoard(selectedScreenBoard, Pens.Red);
+                selectedScreenBoard.Monitor.DrawScreenBoard(selectedScreenBoard, Pens.Red);
+                selectedScreenBoard = focused;
+                drawScreenBoard(selectedScreenBoard, Pens.Blue);
             }
 
         }
@@ -284,8 +291,9 @@ namespace ArrangeWindows
             Graphics g = scrnPanel.CreateGraphics();
             g.Clear(BackColor);
             drawScreenBoards(screenBoards[0],g);
-           
- 
+            if (selectedScreenBoard.Monitor.Index == monitorIndex)
+                drawScreenBoard(selectedScreenBoard,Pens.Blue);
+
         }
 
         public void drawScreenBoard(ScreenBoard sb,Pen p)
@@ -342,7 +350,7 @@ namespace ArrangeWindows
         }
         public struct Monitor
         {
-            public int index;
+            public int Index;
             //screencontroller control size.
             public Ancor Size;
             //monitor resolution.
@@ -353,6 +361,9 @@ namespace ArrangeWindows
             public float ScaleWidth;
             public float ScaleHeight;
             public Action Draw;
+            public Action<ScreenBoard, Pen> DrawScreenBoard;
+            public int X;
+            public int Y;
         }
         private void button1_Click(object sender, EventArgs e)
         {

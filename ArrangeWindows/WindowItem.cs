@@ -164,8 +164,6 @@ namespace ArrangeWindows
         {
             // Preview = User32.getWindowImage(win.Win);
             float factor = (float)2.5;
-            float widthx = 3840 / factor;
-            float heihtx = 2160 / factor;
             //User32.MoveWindow(win.Win, 0, 0,(int)widthx, (int)heihtx, true);
             //return;
             int screenBoadWidth = ScreenBoard.BottomRight.X - ScreenBoard.TopLeft.X;
@@ -173,14 +171,17 @@ namespace ArrangeWindows
 
             float widthFactor = 1/ selectedScreenBoard.Monitor.ScaleWidth;
             float heightFactor = 1/ selectedScreenBoard.Monitor.ScaleHeight;
-            float width = widthFactor* screenBoadWidth / factor;
-            float height = heightFactor * screenBoadHeight / factor;
+           // float width = widthFactor* screenBoadWidth / factor;
+            //float height = heightFactor * screenBoadHeight / factor;
 
-            // Application.Exit();
-            // User32.MoveWindow(win.Win, ScreenBoard.TopLeft.X, ScreenBoard.TopLeft.Y, (int)width, (int)height, true);
-            Bitmap image = User32.getWindowImage(win.Win,(int)(ScreenBoard.TopLeft.X* widthFactor/factor), (int)(ScreenBoard.TopLeft.Y), (int)width, (int)height);
-            //var scaleWidth = (int)(image.Width * selectedScreenBoard.Monitor.Scale);
-            //var scaleHeight = (int)(image.Height * selectedScreenBoard.Monitor.Scale);
+            float width = widthFactor * screenBoadWidth ;
+            float height = heightFactor * screenBoadHeight ;
+          //  Bitmap image = User32.getWindowImage(win.Win, (int)(ScreenBoard.TopLeft.X * widthFactor / factor), (int)(ScreenBoard.TopLeft.Y), (int)width, (int)height);
+
+            
+            Bitmap image = User32.getWindowImage(win.Win,(int)(selectedScreenBoard.Monitor.X +ScreenBoard.TopLeft.X* widthFactor),
+                (int)(selectedScreenBoard.Monitor.Y+ScreenBoard.TopLeft.Y*heightFactor),
+                (int)width, (int)height);
             Preview = new Bitmap(image, new Size(screenBoadWidth, screenBoadHeight));
         }
 

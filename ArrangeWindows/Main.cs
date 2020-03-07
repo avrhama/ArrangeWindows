@@ -30,14 +30,48 @@ namespace ArrangeWindows
                 updateFavoritesList();
             })));
 
+            var device = new User32.DISPLAY_DEVICE();
+            for (int i = 0; i < Screen.AllScreens.Length; i++)
+                {
+                Screen screen = Screen.AllScreens[i];
+                   
+                    device.cb = Marshal.SizeOf(device);
+                    User32.EnumDisplayDevices(device.DeviceName, 0, ref device, 0);
+               // User32.EnumDisplayDevices(device.DeviceName, 0, ref device, 0);
+                //User32.EnumDisplayDevices(device.DeviceName, 0, ref device, 0);
+
+                ScreenController scrnControl = new ScreenController(screen,device.DeviceString,i);
+                    scrnCtrlsLayout.Controls.Add(scrnControl);
+                } 
+                
+            
+
+            
         }
 
 
-
+        [DllImport("User32.dll")]
+        public static extern IntPtr GetDC(IntPtr hwnd);
+        [DllImport("User32.dll")]
+        public static extern void ReleaseDC(IntPtr hwnd, IntPtr dc);
         private void Main_Load(object sender, EventArgs e)
         {
+            Screen[] s = Screen.AllScreens;
+             LoadWindows();
+            /* IntPtr p = new IntPtr(1);
+             IntPtr desktopPtr = GetDC(p);
+             Graphics g = Graphics.FromHdc(desktopPtr);
 
-            LoadWindows();
+             SolidBrush b = new SolidBrush(Color.White);
+             g.FillRectangle(b, new Rectangle(-1366, 514, 384, 10));
+             b = new SolidBrush(Color.Black);
+             g.FillRectangle(b, new Rectangle(-384, 514, 384, 10));
+             g.FillRectangle(b, new Rectangle(-384, 0, 384, 10));
+
+
+             g.Dispose();
+             ReleaseDC(IntPtr.Zero, desktopPtr);*/
+           // Location = new Point(-1366,514);
         }
         List<WindowItem> winItems = new List<WindowItem>();
         public void LoadWindows()
@@ -93,12 +127,15 @@ namespace ArrangeWindows
             }
 
             
-            foreach (WindowItem winItem in winItems)
+          
+            foreach (ScreenController screenController in scrnCtrlsLayout.Controls)
             {
-                scrnCtrl.screenBoardSelected -= winItem.screenBoardSelected;
-                scrnCtrl.screenBoardSelected += winItem.screenBoardSelected;
+                foreach (WindowItem winItem in winItems)
+                {
+                    screenController.screenBoardSelected -= winItem.screenBoardSelected;
+                    screenController.screenBoardSelected += winItem.screenBoardSelected;
+                }
             }
-
 
         }
 

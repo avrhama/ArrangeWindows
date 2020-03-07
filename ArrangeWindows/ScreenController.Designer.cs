@@ -32,11 +32,12 @@
             this.scrnPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.drawingTimer = new System.Windows.Forms.Timer(this.components);
+            this.scrnCtrlNameLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // scrnPanel
             // 
-            this.scrnPanel.Location = new System.Drawing.Point(26, 27);
+            this.scrnPanel.Location = new System.Drawing.Point(26, 44);
             this.scrnPanel.Name = "scrnPanel";
             this.scrnPanel.Size = new System.Drawing.Size(1152, 648);
             this.scrnPanel.TabIndex = 0;
@@ -57,11 +58,21 @@
             // 
             this.drawingTimer.Tick += new System.EventHandler(this.drawingTimer_Tick);
             // 
+            // scrnCtrlNameLbl
+            // 
+            this.scrnCtrlNameLbl.AutoSize = true;
+            this.scrnCtrlNameLbl.Location = new System.Drawing.Point(29, 9);
+            this.scrnCtrlNameLbl.Name = "scrnCtrlNameLbl";
+            this.scrnCtrlNameLbl.Size = new System.Drawing.Size(90, 32);
+            this.scrnCtrlNameLbl.TabIndex = 3;
+            this.scrnCtrlNameLbl.Text = "Name";
+            // 
             // ScreenController
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.scrnCtrlNameLbl);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.scrnPanel);
             this.Name = "ScreenController";
@@ -76,5 +87,6 @@
         private System.Windows.Forms.Panel scrnPanel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer drawingTimer;
+        private System.Windows.Forms.Label scrnCtrlNameLbl;
     }
 }
