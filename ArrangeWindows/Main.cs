@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace ArrangeWindows
 {
@@ -18,6 +19,7 @@ namespace ArrangeWindows
         public Main()
         {
             InitializeComponent();
+           
             if (System.IO.File.Exists(Environment.CurrentDirectory + @"\filteredList.bin"))
                 favoritesWins = SerializeModel.DeSerializeObject<BindingList<string>>(Environment.CurrentDirectory + @"\filteredList.bin");
             else
@@ -37,11 +39,10 @@ namespace ArrangeWindows
                    
                     device.cb = Marshal.SizeOf(device);
                     User32.EnumDisplayDevices(device.DeviceName, 0, ref device, 0);
-               // User32.EnumDisplayDevices(device.DeviceName, 0, ref device, 0);
-                //User32.EnumDisplayDevices(device.DeviceName, 0, ref device, 0);
-
                 ScreenController scrnControl = new ScreenController(screen,device.DeviceString,i);
                     scrnCtrlsLayout.Controls.Add(scrnControl);
+
+                Profile.ProfileForm.setMonitor(screen.Bounds.Width,screen.Bounds.Height, device.DeviceString);
                 } 
                 
             
@@ -214,6 +215,16 @@ namespace ArrangeWindows
         {
             
             LoadWindows();
+        }
+        private void profilesBtn_Click(object sender, EventArgs e)
+        {
+
+            Profile.ProfileForm.open();
+        }
+
+        private void workingSetBtn_Click(object sender, EventArgs e)
+        {
+            Profile.ProfileForm.open();
         }
     }
 }

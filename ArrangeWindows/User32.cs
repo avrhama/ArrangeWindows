@@ -107,7 +107,7 @@ namespace ArrangeWindows
             SW_HIDE, SW_SHOWNORMAL, SW_SHOWMINIMIZED, SW_SHOWMAXIMIZED, SW_SHOWNOACTIVATE, SW_SHOW, SW_MINIMIZE,
             SW_SHOWMINNOACTIVE, SW_SHOWNA, SW_RESTORE
         }
-        public static Bitmap getWindowImage(IntPtr p,int x,int y,int w,int h)
+        public static Bitmap getWindowImage(IntPtr p,int x,int y,int w,int h,bool preview)
         {
 
 
@@ -132,23 +132,24 @@ namespace ArrangeWindows
                     restore = true;
                     break;
             }
-           // if (restore)
-            //{
+            if (preview)
+            {
                 User32.ChangeTransparent(p);
                 User32.ShowWindow(p, (UInt32)User32.WindowState.SW_RESTORE);
-            //}
+            }
 
             Bitmap bmp = new Bitmap((int)(factor*w),(int)(factor*h), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             Graphics gfxBmp = Graphics.FromImage(bmp);
             IntPtr hdcBitmap = gfxBmp.GetHdc();
             User32.MoveWindow(p, x, y, w, h, true);
             User32.PrintWindow(p, hdcBitmap, 0);
-           // User32.MoveWindow(p,rect.left, rect.top, width, height, true);
-          //  if (restore)
-           // {
-                User32.ShowWindow(p, r.showCmd);
+            
+           if (preview)
+           {
+                    User32.MoveWindow(p, rect.left, rect.top, width, height, true);
+                    User32.ShowWindow(p, r.showCmd);
                 User32.ChangeTransparent(p);
-            //}
+            }
 
             gfxBmp.ReleaseHdc(hdcBitmap);
             gfxBmp.Dispose();

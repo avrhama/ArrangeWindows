@@ -55,6 +55,14 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Profile\ProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Profile\ProfileForm.Designer.cs">
+      <DependentUpon>ProfileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Profile\ProfileModel.cs" />
+    <Compile Include="Profile\WorkingSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />
@@ -83,6 +91,9 @@
     </Compile>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Profile\ProfileForm.resx">
+      <DependentUpon>ProfileForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -142,6 +153,45 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\windowCaseOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\windowCaseOffBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\windowCaseOnBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addOff2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addOn2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\removeOn2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\removeOff2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\applyOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\applyOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\saveOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\saveOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoadOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoadOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Profiles.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -37,6 +37,8 @@
             this.updateWinsBtn = new System.Windows.Forms.Button();
             this.showAllCheck = new System.Windows.Forms.CheckBox();
             this.scrnCtrlsLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.profilesBtn = new System.Windows.Forms.Button();
+            this.workingSetBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -122,11 +124,33 @@
             this.scrnCtrlsLayout.Size = new System.Drawing.Size(1633, 837);
             this.scrnCtrlsLayout.TabIndex = 10;
             // 
+            // profilesBtn
+            // 
+            this.profilesBtn.Location = new System.Drawing.Point(2361, 845);
+            this.profilesBtn.Name = "profilesBtn";
+            this.profilesBtn.Size = new System.Drawing.Size(159, 67);
+            this.profilesBtn.TabIndex = 12;
+            this.profilesBtn.Text = "profiles";
+            this.profilesBtn.UseVisualStyleBackColor = true;
+            this.profilesBtn.Click += new System.EventHandler(this.profilesBtn_Click);
+            // 
+            // workingSetBtn
+            // 
+            this.workingSetBtn.Location = new System.Drawing.Point(2539, 845);
+            this.workingSetBtn.Name = "workingSetBtn";
+            this.workingSetBtn.Size = new System.Drawing.Size(178, 68);
+            this.workingSetBtn.TabIndex = 13;
+            this.workingSetBtn.Text = "workingSet";
+            this.workingSetBtn.UseVisualStyleBackColor = true;
+            this.workingSetBtn.Click += new System.EventHandler(this.workingSetBtn_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2944, 1067);
+            this.Controls.Add(this.workingSetBtn);
+            this.Controls.Add(this.profilesBtn);
             this.Controls.Add(this.scrnCtrlsLayout);
             this.Controls.Add(this.showAllCheck);
             this.Controls.Add(this.updateWinsBtn);
@@ -154,6 +178,8 @@
         private System.Windows.Forms.Button updateWinsBtn;
         private System.Windows.Forms.CheckBox showAllCheck;
         private System.Windows.Forms.FlowLayoutPanel scrnCtrlsLayout;
+        private System.Windows.Forms.Button profilesBtn;
+        private System.Windows.Forms.Button workingSetBtn;
     }
 }
 

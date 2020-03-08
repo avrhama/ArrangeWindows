@@ -380,7 +380,13 @@ namespace ArrangeWindows
 
            // return -1;
         }
-      
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != GetType())
+                return false;
+            ScreenBoard sb = (ScreenBoard)obj;
+            return (sb.Monitor.Index == Monitor.Index && sb.Index == Index);
+        }
 
 
     }

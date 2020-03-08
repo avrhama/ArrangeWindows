@@ -9,7 +9,9 @@ namespace ArrangeWindows
 {
    public class WindowButton:PictureBox
     {
-        WindowButtonType type = WindowButtonType.Add;
+        WindowButtonType type;
+        public System.Drawing.Bitmap[] BtnImages { set; get; }
+        
         public WindowButtonType Type {
             set
             {
@@ -23,27 +25,12 @@ namespace ArrangeWindows
         }
         public void setImage(bool turn=false)
         {
-            switch (type)
-            {
-                case WindowButtonType.Add:
-                    if (!turn)
-                        Image = Resource1.addWindowOff;
-                    else
-                        Image = Resource1.addWindowOn;
-                    break;
-                 case   WindowButtonType.Remove:
-                    if (!turn)
-                        Image = Resource1.removeWindowOff;
-                    else
-                        Image = Resource1.removeWindowOn;
-                    break;
-            }
-           
+            int index = 2*(int)type;
+            if (turn)
+                index++;       
+            Image = BtnImages[index];
         }
 
     }
-    public enum WindowButtonType
-    {
-        Add,Remove
-    }
+
 }

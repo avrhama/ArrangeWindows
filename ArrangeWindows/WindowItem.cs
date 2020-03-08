@@ -39,36 +39,16 @@ namespace ArrangeWindows
             InitializeComponent();
             this.win = win;
             Favorite = favorite;
+            addWindowPic.BtnImages = new Bitmap[] { Resource1.addOff, Resource1.addOn, Resource1.removeOff, Resource1.removeOn };
+
             windowIconPic.Image = win.Icon.ToBitmap();
-            ToolTip tt = new ToolTip();
-            windowTitleLbl.MouseHover += new EventHandler((object sender, EventArgs e) =>
-            {
-                tt.Show(win.Title, windowTitleLbl, 5000);
-
-            });
+           
             windowTitleLbl.Text = win.Title.Substring(0, 15);
-            addWindowPic.Click += addWinPicClicked;
-            addWindowPic.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                addWindowPic.setImage(true);
-                BackgroundImage = Resource1.windowCase;
-
-            });
-            addWindowPic.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                addWindowPic.setImage();
-                BackgroundImage = Resource1.windowCaseOff;
-
-
-            });
-
-
+          
             windowItemMenu = new ContextMenu();
             string addItemText="add favorite";
             if(favorite)
                 addItemText = "remove favorite";
-
-
             windowItemMenu.MenuItems.Add(new MenuItem(addItemText, new EventHandler((object sender, EventArgs e) => {
                 addItemText = "add favorite";
                 if (!Favorite)
@@ -78,28 +58,54 @@ namespace ArrangeWindows
                 
 
             })));
+
+            subscribsEvents();
+
+        }
+        public void subscribsEvents()
+        {
+            ToolTip tt = new ToolTip();
+            windowTitleLbl.MouseHover += new EventHandler((object sender, EventArgs e) =>
+            {
+                tt.Show(win.Title, windowTitleLbl, 5000);
+            });
+
+            addWindowPic.Click += addWinPicClicked;
+            addWindowPic.MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+                addWindowPic.setImage(true);
+                BackgroundImage = Resource1.windowCaseOnBlue;
+            });
+            addWindowPic.MouseLeave += new EventHandler((object sender, EventArgs e) =>
+            {
+                addWindowPic.setImage();
+                BackgroundImage = Resource1.windowCaseOffBlue;
+            });
             MouseUp += windowItemShowMenu;
             windowIconPic.MouseUp += windowItemShowMenu;
             windowTitleLbl.MouseUp += windowItemShowMenu;
-         /*   MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            MouseEnter += new EventHandler((object sender, EventArgs e) =>
             {
-                BackgroundImage = Resource1.windowCase;
-            });*/
-          /*  MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                BackgroundImage = Resource1.windowCaseOff;
-
-            });*/
-/*            windowIconPic.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                BackgroundImage = Resource1.windowCase;
+                BackgroundImage = Resource1.windowCaseOnBlue;
             });
-            windowTitleLbl.MouseLeave += new EventHandler((object sender, EventArgs e) =>
+
+            MouseLeave += new EventHandler((object sender, EventArgs e) =>
             {
-                BackgroundImage = Resource1.windowCaseOff;
+                BackgroundImage = Resource1.windowCaseOffBlue;
 
-            });*/
-
+            });
+            windowIconPic.MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+                BackgroundImage = Resource1.windowCaseOnBlue;
+            });
+            windowTitleLbl.MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+                BackgroundImage = Resource1.windowCaseOnBlue;
+            });
+            addWindowPic.MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+                BackgroundImage = Resource1.windowCaseOnBlue;
+            });
         }
         public void windowItemShowMenu(object sender, MouseEventArgs e)
         {
@@ -116,7 +122,7 @@ namespace ArrangeWindows
         public static ScreenBoard selectedScreenBoard;
         public void screenBoardSelected()
         {
-            if (ScreenBoard != null && selectedScreenBoard.Index == ScreenBoard.Index)
+            if (ScreenBoard != null &&ScreenBoard.Equals(selectedScreenBoard))
             {
                 addWindowPic.Type = WindowButtonType.Remove;
             }
@@ -160,28 +166,23 @@ namespace ArrangeWindows
             selectedScreenBoard.Monitor.Draw();
         }
         public Bitmap Preview { set; get; }
-        public void setWinPreview()
+        public void setWinPreview(bool preview=true)
         {
-            // Preview = User32.getWindowImage(win.Win);
-            float factor = (float)2.5;
-            //User32.MoveWindow(win.Win, 0, 0,(int)widthx, (int)heihtx, true);
-            //return;
+
             int screenBoadWidth = ScreenBoard.BottomRight.X - ScreenBoard.TopLeft.X;
             int screenBoadHeight = ScreenBoard.BottomRight.Y - ScreenBoard.TopLeft.Y;
 
             float widthFactor = 1/ selectedScreenBoard.Monitor.ScaleWidth;
             float heightFactor = 1/ selectedScreenBoard.Monitor.ScaleHeight;
-           // float width = widthFactor* screenBoadWidth / factor;
-            //float height = heightFactor * screenBoadHeight / factor;
 
             float width = widthFactor * screenBoadWidth ;
             float height = heightFactor * screenBoadHeight ;
-          //  Bitmap image = User32.getWindowImage(win.Win, (int)(ScreenBoard.TopLeft.X * widthFactor / factor), (int)(ScreenBoard.TopLeft.Y), (int)width, (int)height);
-
             
             Bitmap image = User32.getWindowImage(win.Win,(int)(selectedScreenBoard.Monitor.X +ScreenBoard.TopLeft.X* widthFactor),
                 (int)(selectedScreenBoard.Monitor.Y+ScreenBoard.TopLeft.Y*heightFactor),
-                (int)width, (int)height);
+                (int)width, (int)height, preview);
+
+
             Preview = new Bitmap(image, new Size(screenBoadWidth, screenBoadHeight));
         }
 
@@ -213,5 +214,9 @@ namespace ArrangeWindows
         {
             return a.CompareTo(b);
         }
+    }
+    public enum WindowButtonType
+    {
+        Add, Remove,Apply
     }
 }
