@@ -12,6 +12,10 @@ namespace ArrangeWindows.Profile
     {
         public Profile[] profiles;
         public string name;
+        public override string ToString()
+        {
+            return name;
+        }
     }
     [Serializable]
     public struct Profile

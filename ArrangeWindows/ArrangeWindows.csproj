@@ -55,14 +55,20 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Profile\ProfileForm.cs">
+    <Compile Include="Profile\WorkingSetForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Profile\ProfileForm.Designer.cs">
-      <DependentUpon>ProfileForm.cs</DependentUpon>
+    <Compile Include="Profile\WorkingSetForm.Designer.cs">
+      <DependentUpon>WorkingSetForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Profile\ProfileModel.cs" />
     <Compile Include="Profile\WorkingSet.cs" />
+    <Compile Include="Profile\WorkinSetItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Profile\WorkinSetItem.Designer.cs">
+      <DependentUpon>WorkinSetItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />
@@ -92,8 +98,11 @@
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Profile\ProfileForm.resx">
-      <DependentUpon>ProfileForm.cs</DependentUpon>
+    <EmbeddedResource Include="Profile\WorkingSetForm.resx">
+      <DependentUpon>WorkingSetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Profile\WorkinSetItem.resx">
+      <DependentUpon>WorkinSetItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -192,6 +201,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Profiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\windowCaseSelectedGrey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\closeOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\closeOn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

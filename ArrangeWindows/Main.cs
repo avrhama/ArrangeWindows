@@ -42,7 +42,7 @@ namespace ArrangeWindows
                 ScreenController scrnControl = new ScreenController(screen,device.DeviceString,i);
                     scrnCtrlsLayout.Controls.Add(scrnControl);
 
-                Profile.ProfileForm.setMonitor(screen.Bounds.Width,screen.Bounds.Height, device.DeviceString);
+                Profile.WorkingSetForm.setMonitor(screen.Bounds.Width,screen.Bounds.Height, device.DeviceString);
                 } 
                 
             
@@ -51,28 +51,58 @@ namespace ArrangeWindows
         }
 
 
-        [DllImport("User32.dll")]
-        public static extern IntPtr GetDC(IntPtr hwnd);
-        [DllImport("User32.dll")]
-        public static extern void ReleaseDC(IntPtr hwnd, IntPtr dc);
+       
         private void Main_Load(object sender, EventArgs e)
         {
-            Screen[] s = Screen.AllScreens;
              LoadWindows();
-            /* IntPtr p = new IntPtr(1);
-             IntPtr desktopPtr = GetDC(p);
-             Graphics g = Graphics.FromHdc(desktopPtr);
+            subscribesEvents();
+        }
+        public void subscribesEvents()
+        {
+           
+            saveBtn.Click += new EventHandler((object sender, EventArgs e) =>
+            {
+               
+                Profile.WorkingSet workingSet = new Profile.WorkingSet();
+                workingSet.profiles = new Profile.Profile[scrnCtrlsLayout.Controls.Count];
+                for(int i=0; i< workingSet.profiles.Length;i++)
+                {
+                    ScreenController screenCtrl = (ScreenController)scrnCtrlsLayout.Controls[i];
+                    Profile.Profile p = screenCtrl.createProfile();
+                    workingSet.profiles[i] = p;
+                }
+                Profile.WorkingSetForm.setWorkingSet(workingSet);
+                Profile.WorkingSetForm.open();
+            });
+            saveBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+                saveBtn.setImage(true);
+            });
+            saveBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
+            {
+                saveBtn.setImage();
+            });
+            loadBtn.Click += new EventHandler((object sender, EventArgs e) =>
+            {
+                ScreenController[] screenControllers = new ScreenController[scrnCtrlsLayout.Controls.Count];
+                for (int i = 0; i < screenControllers.Length; i++)
+                {
+                    screenControllers[i] = (ScreenController)scrnCtrlsLayout.Controls[i];
+                    screenControllers[i].createRestore();
+                }
+                Profile.WorkingSetForm.loadWorkSets(screenControllers);
+                Profile.WorkingSetForm.open();
 
-             SolidBrush b = new SolidBrush(Color.White);
-             g.FillRectangle(b, new Rectangle(-1366, 514, 384, 10));
-             b = new SolidBrush(Color.Black);
-             g.FillRectangle(b, new Rectangle(-384, 514, 384, 10));
-             g.FillRectangle(b, new Rectangle(-384, 0, 384, 10));
 
-
-             g.Dispose();
-             ReleaseDC(IntPtr.Zero, desktopPtr);*/
-           // Location = new Point(-1366,514);
+            });
+            loadBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+                loadBtn.setImage(true);
+            });
+            loadBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
+            {
+                loadBtn.setImage();
+            });
         }
         List<WindowItem> winItems = new List<WindowItem>();
         public void LoadWindows()
@@ -219,12 +249,12 @@ namespace ArrangeWindows
         private void profilesBtn_Click(object sender, EventArgs e)
         {
 
-            Profile.ProfileForm.open();
+            Profile.WorkingSetForm.open();
         }
 
         private void workingSetBtn_Click(object sender, EventArgs e)
         {
-            Profile.ProfileForm.open();
+            Profile.WorkingSetForm.open();
         }
     }
 }

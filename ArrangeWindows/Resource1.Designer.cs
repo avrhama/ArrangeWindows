@@ -133,6 +133,26 @@ namespace ArrangeWindows {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap closeOff {
+            get {
+                object obj = ResourceManager.GetObject("closeOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap closeOn {
+            get {
+                object obj = ResourceManager.GetObject("closeOn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LoadOff {
             get {
                 object obj = ResourceManager.GetObject("LoadOff", resourceCulture);
@@ -266,6 +286,16 @@ namespace ArrangeWindows {
         internal static System.Drawing.Bitmap windowCaseOnBlue {
             get {
                 object obj = ResourceManager.GetObject("windowCaseOnBlue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap windowCaseSelectedGrey {
+            get {
+                object obj = ResourceManager.GetObject("windowCaseSelectedGrey", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

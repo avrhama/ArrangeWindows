@@ -139,6 +139,12 @@
   <data name="applyOn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\applyOn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="closeOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\closeOff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="closeOn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\closeOn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="LoadOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\LoadOff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -180,5 +186,8 @@
   </data>
   <data name="windowCaseOnBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\windowCaseOnBlue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="windowCaseSelectedGrey" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\windowCaseSelectedGrey.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

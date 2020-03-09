@@ -1,6 +1,6 @@
 ﻿namespace ArrangeWindows.Profile
 {
-    partial class ProfileForm
+    partial class WorkingSetForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,30 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfileForm));
-            this.profilesLayout = new System.Windows.Forms.FlowLayoutPanel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkingSetForm));
+            this.workingSetsLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.monitorsCombo = new System.Windows.Forms.ComboBox();
             this.profileNameTxt = new System.Windows.Forms.TextBox();
             this.loadBtn = new ArrangeWindows.WindowButton();
             this.saveBtn = new ArrangeWindows.WindowButton();
+            this.applayBtn = new ArrangeWindows.WindowButton();
             ((System.ComponentModel.ISupportInitialize)(this.loadBtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.saveBtn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.applayBtn)).BeginInit();
             this.SuspendLayout();
             // 
-            // profilesLayout
+            // workingSetsLayout
             // 
-            this.profilesLayout.Location = new System.Drawing.Point(25, 115);
-            this.profilesLayout.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.profilesLayout.Name = "profilesLayout";
-            this.profilesLayout.Size = new System.Drawing.Size(600, 273);
-            this.profilesLayout.TabIndex = 11;
+            this.workingSetsLayout.Location = new System.Drawing.Point(25, 115);
+            this.workingSetsLayout.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.workingSetsLayout.Name = "workingSetsLayout";
+            this.workingSetsLayout.Size = new System.Drawing.Size(600, 273);
+            this.workingSetsLayout.TabIndex = 11;
             // 
-            // monitosCombo
+            // monitorsCombo
             // 
             this.monitorsCombo.FormattingEnabled = true;
             this.monitorsCombo.Location = new System.Drawing.Point(25, 10);
             this.monitorsCombo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.monitorsCombo.Name = "monitosCombo";
+            this.monitorsCombo.Name = "monitorsCombo";
             this.monitorsCombo.Size = new System.Drawing.Size(600, 39);
             this.monitorsCombo.TabIndex = 12;
             // 
@@ -84,7 +86,7 @@
         ((System.Drawing.Bitmap)(resources.GetObject("saveBtn.BtnImages"))),
         ((System.Drawing.Bitmap)(resources.GetObject("saveBtn.BtnImages1")))};
             this.saveBtn.Image = ((System.Drawing.Image)(resources.GetObject("saveBtn.Image")));
-            this.saveBtn.Location = new System.Drawing.Point(425, 408);
+            this.saveBtn.Location = new System.Drawing.Point(25, 408);
             this.saveBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(200, 50);
@@ -93,22 +95,39 @@
             this.saveBtn.TabStop = false;
             this.saveBtn.Type = ArrangeWindows.WindowButtonType.Add;
             // 
-            // ProfileForm
+            // applayBtn
+            // 
+            this.applayBtn.BackColor = System.Drawing.Color.Transparent;
+            this.applayBtn.BtnImages = new System.Drawing.Bitmap[] {
+        global::ArrangeWindows.Resource1.applyOff,
+        global::ArrangeWindows.Resource1.applyOn};
+            this.applayBtn.Image = global::ArrangeWindows.Resource1.applyOff;
+            this.applayBtn.Location = new System.Drawing.Point(424, 408);
+            this.applayBtn.Name = "applayBtn";
+            this.applayBtn.Size = new System.Drawing.Size(200, 50);
+            this.applayBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.applayBtn.TabIndex = 14;
+            this.applayBtn.TabStop = false;
+            this.applayBtn.Type = ArrangeWindows.WindowButtonType.Add;
+            // 
+            // WorkingSetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(639, 464);
+            this.Controls.Add(this.applayBtn);
             this.Controls.Add(this.profileNameTxt);
             this.Controls.Add(this.monitorsCombo);
-            this.Controls.Add(this.profilesLayout);
+            this.Controls.Add(this.workingSetsLayout);
             this.Controls.Add(this.loadBtn);
             this.Controls.Add(this.saveBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Name = "ProfileForm";
-            this.Text = "ProfileLoadForm";
+            this.Name = "WorkingSetForm";
+            this.Text = "WorkingSetsForm";
             ((System.ComponentModel.ISupportInitialize)(this.loadBtn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.saveBtn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.applayBtn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,8 +137,9 @@
 
         private WindowButton loadBtn;
         private WindowButton saveBtn;
-        private System.Windows.Forms.FlowLayoutPanel profilesLayout;
+        private System.Windows.Forms.FlowLayoutPanel workingSetsLayout;
         private System.Windows.Forms.ComboBox monitorsCombo;
         private System.Windows.Forms.TextBox profileNameTxt;
+        private WindowButton applayBtn;
     }
 }

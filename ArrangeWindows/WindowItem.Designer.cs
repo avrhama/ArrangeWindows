@@ -40,6 +40,7 @@
             this.windowTitleLbl.AutoSize = true;
             this.windowTitleLbl.BackColor = System.Drawing.Color.Transparent;
             this.windowTitleLbl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.windowTitleLbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.windowTitleLbl.Location = new System.Drawing.Point(96, 21);
             this.windowTitleLbl.Name = "windowTitleLbl";
             this.windowTitleLbl.Size = new System.Drawing.Size(93, 32);
@@ -59,6 +60,7 @@
             // addWindowPic
             // 
             this.addWindowPic.BackColor = System.Drawing.Color.Transparent;
+            this.addWindowPic.BtnImages = new System.Drawing.Bitmap[] { Resource1.addOff, Resource1.addOn, Resource1.removeOff, Resource1.removeOn };
             this.addWindowPic.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addWindowPic.Image = global::ArrangeWindows.Resource1.addOff;
             this.addWindowPic.Location = new System.Drawing.Point(400, 9);
@@ -67,7 +69,7 @@
             this.addWindowPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.addWindowPic.TabIndex = 2;
             this.addWindowPic.TabStop = false;
-            
+            this.addWindowPic.Type = ArrangeWindows.WindowButtonType.Add;
             // 
             // WindowItem
             // 

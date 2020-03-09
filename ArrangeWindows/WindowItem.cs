@@ -39,7 +39,7 @@ namespace ArrangeWindows
             InitializeComponent();
             this.win = win;
             Favorite = favorite;
-            addWindowPic.BtnImages = new Bitmap[] { Resource1.addOff, Resource1.addOn, Resource1.removeOff, Resource1.removeOn };
+            
 
             windowIconPic.Image = win.Icon.ToBitmap();
            

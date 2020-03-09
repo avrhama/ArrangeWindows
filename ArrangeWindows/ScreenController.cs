@@ -14,20 +14,22 @@ namespace ArrangeWindows
     public partial class ScreenController : UserControl
     {
 
-        List<ScreenBoard> screenBoards;
+      //  List<ScreenBoard> screenBoards;
         //screenBoard split's menu to show when right button clicked.
         ContextMenu splitBoardMenu;
         public event Action screenBoardSelected;
         public static ScreenBoard selectedScreenBoard;
         int monitorIndex;
         Monitor monitor;
+        ScreenBoard root;
+        ScreenBoard restore;
         public ScreenController(Screen screen,string name,int index)
         {
             InitializeComponent();
-            screenBoards = new List<ScreenBoard>();
+          //  screenBoards = new List<ScreenBoard>();
             scrnCtrlNameLbl.Text = name;
             monitorIndex = index;
-            ScreenBoard sb = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
+            root = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
             monitor.Name = name;
             monitor.Index = index;
             monitor.Size = new Ancor(scrnPanel.Width, scrnPanel.Height);
@@ -41,10 +43,9 @@ namespace ArrangeWindows
             monitor.DrawScreenBoard = drawScreenBoard;
             monitor.X = screen.Bounds.X;
             monitor.Y = screen.Bounds.Y;
-            sb.Monitor = monitor;
-            selectedScreenBoard = sb;
-            screenBoards.Add(sb);
-            screenBoards.Sort(ScreenBoard.compareScreenBoard);
+            root.Monitor = monitor;
+            selectedScreenBoard = root;
+            focused = root;
             //initialize menu
             splitBoardMenu = new ContextMenu();
             MenuItem verticalSplit = new MenuItem("vertical split", splitScreen);
@@ -64,7 +65,7 @@ namespace ArrangeWindows
             scrnPanel.Paint += DrawScreenBoards;
             applayBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
-                apply(screenBoards[0]);
+                applyWindowsPositions(root);
             });
             applayBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
             {
@@ -76,25 +77,12 @@ namespace ArrangeWindows
             });
             saveBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
-                //string profilePath = String.Format(@"C:\Users\Brain\Documents\{0}.bin", monitor.Name);
-                // ProfileModel.saveProfile(screenBoards[0], profilePath);
-                /*
-                 *  public struct Profile
-    {
-        public SplitSpot splitSpotSet;
-        public string monitorName;
-        public Point resolution;
-    }
-                 */
+
                 Profile.WorkingSet workingSet=new Profile.WorkingSet();
-                Profile.Profile p;
-                p.splitSpotSet = ProfileModel.getSplitSpot(screenBoards[0]);
-                p.monitorName = monitor.Name;
-                p.resolution = new Point(monitor.Resolution.X,monitor.Y);
-               
+                Profile.Profile p = createProfile();
                 workingSet.profiles = new Profile.Profile[] { p };
-                Profile.ProfileForm.setWorkingSet(workingSet);
-                Profile.ProfileForm.open();
+                Profile.WorkingSetForm.setWorkingSet(workingSet);
+                Profile.WorkingSetForm.open();
             });
             saveBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
             {
@@ -107,6 +95,9 @@ namespace ArrangeWindows
             loadBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
 
+                createRestore();
+                Profile.WorkingSetForm.loadWorkSets(new ScreenController[] { this});
+                Profile.WorkingSetForm.open();                
             });
             loadBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
             {
@@ -118,17 +109,26 @@ namespace ArrangeWindows
             });
         }
 
-        //returns the screenBoard's index that contains the given point.
-        public int getScreenBoardIndexContainsPoint(Point p)
+        public Profile.Profile createProfile()
         {
-            for (int i = 0; i < screenBoards.Count; i++)
-            {
-                if (screenBoards[i].containsPoint(p))
-                    return i;
-
-            }
-            return -1;
+            Profile.Profile p;
+            p.splitSpotSet = ProfileModel.getSplitSpot(root);
+            p.monitorName = monitor.Name;
+            p.resolution = new Point(monitor.Resolution.X, monitor.Y);
+            return p;
         }
+
+        public void createRestore()
+        {
+            if (restore == null)
+            {
+                restore = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
+                restore.First = root.First;
+                restore.Second = root.Second;
+            }
+        }
+
+        //returns the screenBoard that contains the given point.
         public ScreenBoard getScreenBoardContainsPoint(ScreenBoard sb,Point p)
         {
             if (sb.containsPoint(p))
@@ -153,12 +153,8 @@ namespace ArrangeWindows
         {
             MenuItem mi = (MenuItem)sender;
             Point clickedPoint = (Point)mi.Parent.Tag;
-            int index = getScreenBoardIndexContainsPoint(clickedPoint);
-            ScreenBoard selected = screenBoards[index];
-            selected = getScreenBoardContainsPoint(screenBoards[0], clickedPoint);
+            ScreenBoard  selected = getScreenBoardContainsPoint(root, clickedPoint);
             selected.remove();
-            screenBoards.Remove(selected);
-            screenBoards.Sort(ScreenBoard.compareScreenBoard);
             scrnPanel.Invalidate();
             focused = null;
         }
@@ -175,7 +171,7 @@ namespace ArrangeWindows
         }
         public ScreenBoard createScreenBoard(Point splitPoint, bool isVertical)
         {
-            ScreenBoard selected = getScreenBoardContainsPoint(screenBoards[0], splitPoint);
+            ScreenBoard selected = getScreenBoardContainsPoint(root, splitPoint);
 
             ScreenBoard sb;
             if (isVertical)
@@ -189,11 +185,9 @@ namespace ArrangeWindows
                 sb = new ScreenBoard(selected.TopLeft.X, splitPoint.Y, selected.BottomRight.X, selected.BottomRight.Y);
                 selected.addChild(splitPoint.X, splitPoint.Y, "h");
             }
-            screenBoards.Sort(ScreenBoard.compareScreenBoard);
+            
             scrnPanel.Invalidate();
             focused = sb;
-
-            //getFocusedScreenBoard(splitPoint);
 
             WindowItem.selectedScreenBoard = selected;
             screenBoardSelected?.Invoke();
@@ -213,7 +207,7 @@ namespace ArrangeWindows
 
                 if (resized != null )
                 {
-                   
+
                     switch (cursorStatus)
                     {
                         case CursorStatus.Left:
@@ -241,7 +235,7 @@ namespace ArrangeWindows
                 }
                 else
                 {
-                    WindowItem.selectedScreenBoard = getScreenBoardContainsPoint(screenBoards[0],e.Location);
+                    WindowItem.selectedScreenBoard = getScreenBoardContainsPoint(root, e.Location);
                     screenBoardSelected?.Invoke();
                 }
 
@@ -253,8 +247,7 @@ namespace ArrangeWindows
        
             if (e.Button == MouseButtons.Left)
             {
-                if (e.X <= 0 || e.X >= scrnPanel.Width - 1 || e.Y <= 0 || e.Y >= scrnPanel.Height - 1)
-                    return;
+
                 if (cursorStatus != CursorStatus.Default)
                 {
                     resized = focused;
@@ -274,13 +267,14 @@ namespace ArrangeWindows
             if (focused == null || focused.First != null || !focused.containsPoint(e.Location))
             {
 
-                focused = getScreenBoardContainsPoint(screenBoards[0], e.Location);
+                focused = getScreenBoardContainsPoint(root, e.Location);
 
             }
             if (focused != null)
                 getFocusedScreenBoard(e.Location);
             if (resized != null)
             {
+
                 if (!drawing)
                     return;
                 else
@@ -288,6 +282,8 @@ namespace ArrangeWindows
                     drawing = false;
                     drawingTimer.Start();
                 }
+               
+                    
                 switch (cursorStatus)
                 {
                     case CursorStatus.Left:
@@ -311,10 +307,14 @@ namespace ArrangeWindows
         CursorStatus cursorStatus = CursorStatus.Default;
         public  void getFocusedScreenBoard(Point p)
         {
-
+            int offset = 5;
+            if (p.X < 5 || p.X > scrnPanel.Width - 1 - offset || p.Y < offset || p.Y > scrnPanel.Height - 1 - offset)
+                resized = null;
             if (resized != null)
                 return;
-            int offset = 5;
+           
+
+
             bool diff1 = p.X- focused.TopLeft.X< offset;
             bool diff2 = p.Y-focused.TopLeft.Y < offset;
             bool diff3= focused.BottomRight.X-p.X < offset;
@@ -359,7 +359,7 @@ namespace ArrangeWindows
         {
             Graphics g = scrnPanel.CreateGraphics();
             g.Clear(BackColor);
-            drawScreenBoards(screenBoards[0],g);
+            drawScreenBoards(root, g);
             if (selectedScreenBoard.Monitor.Index == monitorIndex)
                 drawScreenBoard(selectedScreenBoard,Pens.Blue);
 
@@ -435,11 +435,7 @@ namespace ArrangeWindows
             public int X;
             public int Y;
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            screenBoards.Sort(ScreenBoard.compareScreenBoard);
-            scrnPanel.Invalidate();
-        }
+       
         bool drawing = true;
         private void drawingTimer_Tick(object sender, EventArgs e)
         {
@@ -450,36 +446,61 @@ namespace ArrangeWindows
         private void button1_Click_1(object sender, EventArgs e)
         {
             string profilePath = String.Format(@"C:\Users\Brain\Documents\{0}.bin",monitor.Name);
-            ProfileModel.saveProfile(screenBoards[0],profilePath);
+            ProfileModel.saveProfile(root, profilePath);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             string profilePath = String.Format(@"C:\Users\Brain\Documents\{0}.bin", monitor.Name);
-          SplitSpot splitSpot = ProfileModel.loadProfile(profilePath);
+            SplitSpot splitSpot = ProfileModel.loadProfile(profilePath);
+            root.First = null;
+            root.Second = null;
             loadProfile(splitSpot);
 
         }
-        public void loadProfile(SplitSpot splitSpot)
+
+        private void loadProfile(SplitSpot splitSpot)
         {
             if (splitSpot == null)
                 return;     
-          ScreenBoard sb=createScreenBoard(new Point(splitSpot.X, splitSpot.Y), splitSpot.IsVertical);       
+                createScreenBoard(new Point(splitSpot.X, splitSpot.Y), splitSpot.IsVertical);       
                 loadProfile(splitSpot.FirstSplit);
                 loadProfile(splitSpot.SecondSplit);
         
         }
-        public void apply(ScreenBoard sb)
+        public void previewProfile(SplitSpot splitSpot)
+        {
+            root.First = null;
+            root.Second = null;
+            loadProfile(splitSpot);
+        }
+        public void restoreProfile()
+        {
+            if (restore == null)
+                return;
+            root.First = restore.First;
+            root.Second = restore.Second;
+            restore = null;
+            Draw();
+        }
+        public void applyProfile()
+        {
+            restore = root;
+            restore = null;
+        }
+        public void applyWindowsPositions(ScreenBoard sb)
         {
             if (sb.First != null)
             {
-                apply(sb.First);
-                apply(sb.Second);
+                applyWindowsPositions(sb.First);
+                applyWindowsPositions(sb.Second);
             }
             else if (sb.WindowItem != null)
                 sb.WindowItem.setWinPreview(false);
 
 
         }
+       
+       
     }
 }
