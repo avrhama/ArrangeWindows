@@ -19,6 +19,15 @@ namespace ArrangeWindows
         ContextMenu splitBoardMenu;
         public event Action screenBoardSelected;
         public static ScreenBoard selectedScreenBoard;
+        public static ScreenBoard Test
+        {
+            set
+            {
+                if (value == null)
+                    selectedScreenBoard = null;
+                selectedScreenBoard = value;
+            }
+        }
         int monitorIndex;
         Monitor monitor;
         ScreenBoard root;
@@ -45,6 +54,7 @@ namespace ArrangeWindows
             monitor.Y = screen.Bounds.Y;
             root.Monitor = monitor;
             selectedScreenBoard = root;
+            Test = selectedScreenBoard;
             focused = root;
             //initialize menu
             splitBoardMenu = new ContextMenu();
@@ -67,14 +77,7 @@ namespace ArrangeWindows
             {
                 applyWindowsPositions(root);
             });
-            applayBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                applayBtn.setImage(true);
-            });
-            applayBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                applayBtn.setImage();
-            });
+            
             saveBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
 
@@ -84,14 +87,7 @@ namespace ArrangeWindows
                 Profile.WorkingSetForm.setWorkingSet(workingSet);
                 Profile.WorkingSetForm.open();
             });
-            saveBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                saveBtn.setImage(true);
-            });
-            saveBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                saveBtn.setImage();
-            });
+
             loadBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
 
@@ -99,14 +95,7 @@ namespace ArrangeWindows
                 Profile.WorkingSetForm.loadWorkSets(new ScreenController[] { this});
                 Profile.WorkingSetForm.open();                
             });
-            loadBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                loadBtn.setImage(true);
-            });
-            loadBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                loadBtn.setImage();
-            });
+
         }
 
         public Profile.Profile createProfile()
@@ -228,10 +217,11 @@ namespace ArrangeWindows
                             break;
 
                     }
-                    resized = null;
+                   
 
-                    resized?.WindowItem.setWinPreview();
+                    resized.WindowItem?.setWinPreview();
                     scrnPanel.Invalidate();
+                    resized = null;
                 }
                 else
                 {
@@ -254,7 +244,9 @@ namespace ArrangeWindows
                 }
                // drawScreenBoard(selectedScreenBoard, Pens.Red);
                 selectedScreenBoard.Monitor.DrawScreenBoard(selectedScreenBoard, Pens.Red);
+                Test = focused;
                 selectedScreenBoard = focused;
+               
                 drawScreenBoard(selectedScreenBoard, Pens.Blue);
             }
 
@@ -268,7 +260,8 @@ namespace ArrangeWindows
             {
 
                 focused = getScreenBoardContainsPoint(root, e.Location);
-
+                focused = focused == null ? selectedScreenBoard : focused;
+                   // Test = focused;
             }
             if (focused != null)
                 getFocusedScreenBoard(e.Location);
@@ -319,12 +312,13 @@ namespace ArrangeWindows
             bool diff2 = p.Y-focused.TopLeft.Y < offset;
             bool diff3= focused.BottomRight.X-p.X < offset;
             bool diff4 = focused.BottomRight.Y - p.Y < offset;
-            
+
             if ((diff1 && diff2) || (diff3 && diff4))
             {
-                cursorStatus = (diff1) ?CursorStatus.TopLeft : CursorStatus.BottomRight;
+                cursorStatus = (diff1) ? CursorStatus.TopLeft : CursorStatus.BottomRight;
                 Cursor.Current = Cursors.SizeNWSE;
-            }else if((diff1 && diff4) || (diff2 && diff3))
+            }
+            else if ((diff1 && diff4) || (diff2 && diff3))
             {
                 cursorStatus = (diff1) ? CursorStatus.BottomLeft : CursorStatus.TopRight;
                 Cursor.Current = Cursors.SizeNESW;
@@ -333,7 +327,7 @@ namespace ArrangeWindows
             {
                 cursorStatus = diff1 ? CursorStatus.Left : CursorStatus.Right;
                 Cursor.Current = Cursors.SizeWE;
-            }  
+            }
             else if (diff2 || diff4)
             {
                 cursorStatus = diff2 ? CursorStatus.Top : CursorStatus.Bottom;

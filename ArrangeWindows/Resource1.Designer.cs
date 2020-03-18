@@ -73,6 +73,26 @@ namespace ArrangeWindows {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap addBtnOff {
+            get {
+                object obj = ResourceManager.GetObject("addBtnOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap addBtnOn {
+            get {
+                object obj = ResourceManager.GetObject("addBtnOn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap addOff {
             get {
                 object obj = ResourceManager.GetObject("addOff", resourceCulture);
@@ -126,6 +146,26 @@ namespace ArrangeWindows {
         internal static System.Drawing.Bitmap applyOn {
             get {
                 object obj = ResourceManager.GetObject("applyOn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap browserOff {
+            get {
+                object obj = ResourceManager.GetObject("browserOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap browserOn {
+            get {
+                object obj = ResourceManager.GetObject("browserOn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -246,6 +286,26 @@ namespace ArrangeWindows {
         internal static System.Drawing.Bitmap saveOn {
             get {
                 object obj = ResourceManager.GetObject("saveOn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap settingsOff {
+            get {
+                object obj = ResourceManager.GetObject("settingsOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap settingsOn {
+            get {
+                object obj = ResourceManager.GetObject("settingsOn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

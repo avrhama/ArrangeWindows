@@ -215,8 +215,5 @@ namespace ArrangeWindows
             return a.CompareTo(b);
         }
     }
-    public enum WindowButtonType
-    {
-        Add, Remove,Apply
-    }
+   
 }

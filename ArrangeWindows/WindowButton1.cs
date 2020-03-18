@@ -9,6 +9,28 @@ namespace ArrangeWindows
 {
    public class WindowButton:PictureBox
     {
+        public WindowButton()
+        {
+            SizeMode = PictureBoxSizeMode.StretchImage;
+            MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+               setImage(true);
+            });
+            MouseLeave += new EventHandler((object sender, EventArgs e) =>
+            {
+                setImage();
+            });
+            MouseUp += new MouseEventHandler((object sender, MouseEventArgs e) =>
+            {
+
+                        setImage(true);
+            });
+            MouseDown += new MouseEventHandler((object sender, MouseEventArgs e) =>
+            {
+                setImage();
+            });
+
+        }
         WindowButtonType type;
         public System.Drawing.Bitmap[] BtnImages { set; get; }
         
@@ -31,6 +53,10 @@ namespace ArrangeWindows
             Image = BtnImages[index];
         }
 
+    }
+    public enum WindowButtonType
+    {
+        Add, Remove, Apply,Settings
     }
 
 }

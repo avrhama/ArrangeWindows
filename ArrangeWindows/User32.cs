@@ -90,6 +90,8 @@ namespace ArrangeWindows
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int Width, int Height, bool Repaint);
+        [DllImport("user32.DLL")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
         public const int GWL_EXSTYLE = -20;
@@ -136,6 +138,10 @@ namespace ArrangeWindows
             {
                 User32.ChangeTransparent(p);
                 User32.ShowWindow(p, (UInt32)User32.WindowState.SW_RESTORE);
+            } else
+            {        
+                    User32.ShowWindow(p, (UInt32)User32.WindowState.SW_RESTORE);
+                    SetForegroundWindow(p);       
             }
 
             Bitmap bmp = new Bitmap((int)(factor*w),(int)(factor*h), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -146,58 +152,15 @@ namespace ArrangeWindows
             
            if (preview)
            {
-                    User32.MoveWindow(p, rect.left, rect.top, width, height, true);
-                    User32.ShowWindow(p, r.showCmd);
-                User32.ChangeTransparent(p);
-            }
-
-            gfxBmp.ReleaseHdc(hdcBitmap);
-            gfxBmp.Dispose();
-          //  bmp.Save(@"C:\Users\Brain\Pictures\temp\vlc.png", System.Drawing.Imaging.ImageFormat.Png);
-
-            return bmp;
-
-        }
-        public static Bitmap getWindowImage(IntPtr p)
-        {
-
-
-
-            var r = new User32.WINDOWPLACEMENT();
-            User32.GetWindowPlacement(p, ref r);
-            var rect = r.rcNormalPosition;
-            int width = (int)Math.Floor((rect.right - rect.left) * 2.5);
-            int height = (int)Math.Floor((rect.bottom - rect.top) * 2.5);
-
-            Bitmap bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            Graphics gfxBmp = Graphics.FromImage(bmp);
-            IntPtr hdcBitmap = gfxBmp.GetHdc();
-
-            bool restore = false; ;
-            User32.WindowState showCmd = (User32.WindowState)r.showCmd;
-            switch (showCmd)
-            {
-                case User32.WindowState.SW_HIDE:
-                case User32.WindowState.SW_MINIMIZE:
-                case User32.WindowState.SW_SHOWMINIMIZED:
-                    restore = true;
-                    break;
-            }
-            if (restore)
-            {
-                User32.ChangeTransparent(p);
-                User32.ShowWindow(p, (UInt32)User32.WindowState.SW_RESTORE);
-            }
-            User32.PrintWindow(p, hdcBitmap, 0);
-            if (restore)
-            {
+               User32.MoveWindow(p, rect.left, rect.top, width, height, true);
                 User32.ShowWindow(p, r.showCmd);
                 User32.ChangeTransparent(p);
             }
+           
 
             gfxBmp.ReleaseHdc(hdcBitmap);
             gfxBmp.Dispose();
-            bmp.Save(@"C:\Users\Brain\Pictures\temp\vlc.png", System.Drawing.Imaging.ImageFormat.Png);
+
             return bmp;
 
         }

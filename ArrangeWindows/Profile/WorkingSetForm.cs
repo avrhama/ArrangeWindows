@@ -14,7 +14,6 @@ namespace ArrangeWindows.Profile
     {
         private static WorkingSetForm singalton;
         WorkingSet workingSet;
-        string workingSetPath = @"C:\Users\Brain\Pictures\temp\workingset\";
         Action<string> WorkingSetItemAction;
         ScreenController[] screenControllers;
    
@@ -37,44 +36,23 @@ namespace ArrangeWindows.Profile
             saveBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
                 workingSet.name = profileNameTxt.Text.Trim();
-                string filePath = String.Format(@"{0}{1}.bin", workingSetPath, workingSet.name);
+                string filePath = String.Format(@"{0}{1}.bin", Settings.Settings.WorkSetPath, workingSet.name);
                 SerializeModel.SerializeObject(workingSet, filePath);
                 WorkinSetItem workinSetItem = new WorkinSetItem(workingSet);
                 workingSetsLayout.Controls.Add(workinSetItem);
             });
-            saveBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                saveBtn.setImage(true);
-            });
-            saveBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                saveBtn.setImage();
-            });
+           
             loadBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
 
             });
-            loadBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                loadBtn.setImage(true);
-            });
-            loadBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                loadBtn.setImage();
-            });
+           
             applayBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
                 foreach (ScreenController screen in screenControllers)
                     screen.applyProfile();
             });
-            applayBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                applayBtn.setImage(true);
-            });
-            applayBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                applayBtn.setImage();
-            });
+          
         }
         private static void cerateSinglton()
         {
@@ -97,9 +75,11 @@ namespace ArrangeWindows.Profile
         private void loadWorkSetsItems()
         {
             List<WorkingSet> list = new List<WorkingSet>();
-            foreach (string path in System.IO.Directory.GetFiles(workingSetPath))
+            foreach (string path in System.IO.Directory.GetFiles(Settings.Settings.WorkSetPath))
                 try
                 {
+                    if (!path.EndsWith(".bin"))
+                        continue;
                     WorkingSet workingSet_ = SerializeModel.DeSerializeObject<WorkingSet>(path);
                     WorkinSetItem workinSetItem = new WorkinSetItem(workingSet_);
                     WorkingSetItemAction += workinSetItem.WorkingSetItemSelected;

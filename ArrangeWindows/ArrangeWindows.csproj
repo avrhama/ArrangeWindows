@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -85,6 +86,13 @@
       <DependentUpon>ScreenController.cs</DependentUpon>
     </Compile>
     <Compile Include="SerializeModel.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\settingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\settingsForm.Designer.cs">
+      <DependentUpon>settingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="User32.cs" />
     <Compile Include="WindowButton1.cs">
       <SubType>Component</SubType>
@@ -119,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ScreenController.resx">
       <DependentUpon>ScreenController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\settingsForm.resx">
+      <DependentUpon>settingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WindowItem.resx">
       <DependentUpon>WindowItem.cs</DependentUpon>
@@ -210,6 +221,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\closeOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settingsOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settingsOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addBtnOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addBtnOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\browserOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\browserOn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

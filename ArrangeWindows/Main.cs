@@ -19,18 +19,9 @@ namespace ArrangeWindows
         public Main()
         {
             InitializeComponent();
-           
-            if (System.IO.File.Exists(Environment.CurrentDirectory + @"\filteredList.bin"))
-                favoritesWins = SerializeModel.DeSerializeObject<BindingList<string>>(Environment.CurrentDirectory + @"\filteredList.bin");
-            else
-                favoritesWins = new BindingList<string>();
-            favoritesWinsList.DataSource = favoritesWins;
-            favoritesWinsMenu = new ContextMenu();
-            favoritesWinsMenu.MenuItems.Add(new MenuItem("remove", new EventHandler((object sender, EventArgs e) =>
-            {
-                favoritesWins.Remove(favoritesWinsList.SelectedItem.ToString());
-                updateFavoritesList();
-            })));
+            TopMost = true;
+            settings = new Settings.Settings();
+            settings.listUpdated += LoadWindows;
 
             var device = new User32.DISPLAY_DEVICE();
             for (int i = 0; i < Screen.AllScreens.Length; i++)
@@ -43,11 +34,7 @@ namespace ArrangeWindows
                     scrnCtrlsLayout.Controls.Add(scrnControl);
 
                 Profile.WorkingSetForm.setMonitor(screen.Bounds.Width,screen.Bounds.Height, device.DeviceString);
-                } 
-                
-            
-
-            
+                }           
         }
 
 
@@ -74,14 +61,6 @@ namespace ArrangeWindows
                 Profile.WorkingSetForm.setWorkingSet(workingSet);
                 Profile.WorkingSetForm.open();
             });
-            saveBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                saveBtn.setImage(true);
-            });
-            saveBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                saveBtn.setImage();
-            });
             loadBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
                 ScreenController[] screenControllers = new ScreenController[scrnCtrlsLayout.Controls.Count];
@@ -92,22 +71,23 @@ namespace ArrangeWindows
                 }
                 Profile.WorkingSetForm.loadWorkSets(screenControllers);
                 Profile.WorkingSetForm.open();
+            });
 
+            Settings.settingsForm settingsForm=new Settings.settingsForm(settings);
+            settingsBtn.Click += new EventHandler((object sender, EventArgs e) =>
+            {
+                if (settingsForm.IsDisposed)
+                {
+                    settingsForm = new Settings.settingsForm(settings);
+                }
+                settingsForm.ShowDialog();
 
             });
-            loadBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
-            {
-                loadBtn.setImage(true);
-            });
-            loadBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
-            {
-                loadBtn.setImage();
-            });
+
         }
         List<WindowItem> winItems = new List<WindowItem>();
         public void LoadWindows()
         {
-            listBox1.Sorted = true;
             foreach (Process p in Process.GetProcesses())
             {
                 try
@@ -120,7 +100,7 @@ namespace ArrangeWindows
                     Window win = new Window(p.MainWindowHandle, p.MainWindowTitle);
                    // bool exists = winItems.Exists(x=>x.Win.Equals(win));
                     WindowItem existsWinItm = winItems.Find(x => x.Win.Equals(win));
-                    bool favorite = favoritesWins.Contains(p.ProcessName);
+                    bool favorite = settings.FavoritesWins.Contains(p.ProcessName);
                     if (existsWinItm==null && (showAllCheck.Checked||favorite))
                     {
                         
@@ -137,7 +117,7 @@ namespace ArrangeWindows
                     else if (existsWinItm!=null)
                     {
                         if (!showAllCheck.Checked)
-                            if (!favoritesWins.Contains(p.ProcessName))
+                            if (!settings.FavoritesWins.Contains(p.ProcessName))
                             {
                                 winItems.Remove(existsWinItm);
                                 winsLayout.Controls.Remove(existsWinItm);
@@ -193,53 +173,32 @@ namespace ArrangeWindows
             //Text = p.ToString();
         }
         BindingList<string> favoritesWins;
-        private void addWinNameBtn_Click(object sender, EventArgs e)
-        {
-
-            string winName = addWinTxt.Text.Trim();
-            if (!favoritesWins.Contains(winName))
-            {
-                favoritesWins.Add(winName);
-                updateFavoritesList();
-                LoadWindows();
-            }
-
-        }
+        Settings.Settings settings;
+      
         public void addFavorite(WindowItem winItem,bool favorite)
         {
             if (favorite)
             {
-                favoritesWins.Remove(winItem.Win.Name);
+                settings.FavoritesWins.Remove(winItem.Win.Name);
                 if(!showAllCheck.Checked)
                 LoadWindows();
             }
             else
             {
                 winItem.Favorite = true;
-               favoritesWins.Add(winItem.Win.Name);
+                settings.FavoritesWins.Add(winItem.Win.Name);
 
             }
-            updateFavoritesList();
+            settings.updateFavoritesList();
 
         }
-        private void filterListMouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                if (favoritesWinsList.SelectedItem != null)
-                    favoritesWinsMenu.Show(favoritesWinsList, e.Location);
-            }
-
-        }
+      
         public void updateFavoritesList()
         {
             SerializeModel.SerializeObject<BindingList<string>>(favoritesWins, Environment.CurrentDirectory + @"\filteredList.bin");
         }
 
-        private void updateWinsBtn_Click(object sender, EventArgs e)
-        {
-            LoadWindows();
-        }
+  
 
         private void showAllCheck_CheckedChanged(object sender, EventArgs e)
         {
