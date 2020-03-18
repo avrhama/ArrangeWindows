@@ -19,7 +19,6 @@ namespace ArrangeWindows
         public Main()
         {
             InitializeComponent();
-            TopMost = true;
             settings = new Settings.Settings();
             settings.listUpdated += LoadWindows;
 
@@ -214,6 +213,12 @@ namespace ArrangeWindows
         private void workingSetBtn_Click(object sender, EventArgs e)
         {
             Profile.WorkingSetForm.open();
+        }
+
+        private void topCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            TopMost = topCheck.Checked ;
+
         }
     }
 }

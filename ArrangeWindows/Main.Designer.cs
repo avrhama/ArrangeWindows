@@ -33,13 +33,14 @@
             this.showAllCheck = new System.Windows.Forms.CheckBox();
             this.scrnCtrlsLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.settingsBtn = new ArrangeWindows.WindowButton();
             this.saveBtn = new ArrangeWindows.WindowButton();
             this.loadBtn = new ArrangeWindows.WindowButton();
+            this.settingsBtn = new ArrangeWindows.WindowButton();
+            this.topCheck = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.settingsBtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.saveBtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadBtn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.settingsBtn)).BeginInit();
             this.SuspendLayout();
             // 
             // winsLayout
@@ -80,20 +81,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "WorkingSets";
             // 
-            // settingsBtn
-            // 
-            this.settingsBtn.BtnImages = new System.Drawing.Bitmap[] {
-        global::ArrangeWindows.Resource1.settingsOff,
-        ((System.Drawing.Bitmap)(resources.GetObject("settingsBtn.BtnImages")))};
-            this.settingsBtn.Image = global::ArrangeWindows.Resource1.settingsOff;
-            this.settingsBtn.Location = new System.Drawing.Point(1891, 683);
-            this.settingsBtn.Name = "settingsBtn";
-            this.settingsBtn.Size = new System.Drawing.Size(207, 50);
-            this.settingsBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.settingsBtn.TabIndex = 15;
-            this.settingsBtn.TabStop = false;
-            this.settingsBtn.Type = ArrangeWindows.WindowButtonType.Add;
-            // 
             // saveBtn
             // 
             this.saveBtn.BtnImages = new System.Drawing.Bitmap[] {
@@ -122,11 +109,39 @@
             this.loadBtn.TabStop = false;
             this.loadBtn.Type = ArrangeWindows.WindowButtonType.Add;
             // 
+            // settingsBtn
+            // 
+            this.settingsBtn.BtnImages = new System.Drawing.Bitmap[] {
+        global::ArrangeWindows.Resource1.settingsOff,
+        ((System.Drawing.Bitmap)(resources.GetObject("settingsBtn.BtnImages")))};
+            this.settingsBtn.Image = global::ArrangeWindows.Resource1.settingsOff;
+            this.settingsBtn.Location = new System.Drawing.Point(1891, 683);
+            this.settingsBtn.Name = "settingsBtn";
+            this.settingsBtn.Size = new System.Drawing.Size(207, 50);
+            this.settingsBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.settingsBtn.TabIndex = 15;
+            this.settingsBtn.TabStop = false;
+            this.settingsBtn.Type = ArrangeWindows.WindowButtonType.Add;
+            // 
+            // topCheck
+            // 
+            this.topCheck.AutoSize = true;
+            this.topCheck.Checked = true;
+            this.topCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.topCheck.Location = new System.Drawing.Point(1448, 855);
+            this.topCheck.Name = "topCheck";
+            this.topCheck.Size = new System.Drawing.Size(93, 36);
+            this.topCheck.TabIndex = 16;
+            this.topCheck.Text = "top";
+            this.topCheck.UseVisualStyleBackColor = true;
+            this.topCheck.CheckedChanged += new System.EventHandler(this.topCheck_CheckedChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2363, 984);
+            this.Controls.Add(this.topCheck);
             this.Controls.Add(this.settingsBtn);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.scrnCtrlsLayout);
@@ -136,9 +151,9 @@
             this.Text = "Arrange Windows";
             this.Load += new System.EventHandler(this.Main_Load);
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.settingsBtn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.saveBtn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadBtn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.settingsBtn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -152,6 +167,7 @@
         private WindowButton saveBtn;
         private WindowButton loadBtn;
         private WindowButton settingsBtn;
+        private System.Windows.Forms.CheckBox topCheck;
     }
 }
 

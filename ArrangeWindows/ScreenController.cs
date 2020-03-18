@@ -14,20 +14,11 @@ namespace ArrangeWindows
     public partial class ScreenController : UserControl
     {
 
-      //  List<ScreenBoard> screenBoards;
         //screenBoard split's menu to show when right button clicked.
         ContextMenu splitBoardMenu;
         public event Action screenBoardSelected;
         public static ScreenBoard selectedScreenBoard;
-        public static ScreenBoard Test
-        {
-            set
-            {
-                if (value == null)
-                    selectedScreenBoard = null;
-                selectedScreenBoard = value;
-            }
-        }
+       
         int monitorIndex;
         Monitor monitor;
         ScreenBoard root;
@@ -35,7 +26,6 @@ namespace ArrangeWindows
         public ScreenController(Screen screen,string name,int index)
         {
             InitializeComponent();
-          //  screenBoards = new List<ScreenBoard>();
             scrnCtrlNameLbl.Text = name;
             monitorIndex = index;
             root = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
@@ -54,7 +44,6 @@ namespace ArrangeWindows
             monitor.Y = screen.Bounds.Y;
             root.Monitor = monitor;
             selectedScreenBoard = root;
-            Test = selectedScreenBoard;
             focused = root;
             //initialize menu
             splitBoardMenu = new ContextMenu();
@@ -158,29 +147,26 @@ namespace ArrangeWindows
             createScreenBoard(splitPoint,isVertical);
 
         }
-        public ScreenBoard createScreenBoard(Point splitPoint, bool isVertical)
+        public void createScreenBoard(Point splitPoint, bool isVertical)
         {
             ScreenBoard selected = getScreenBoardContainsPoint(root, splitPoint);
 
             ScreenBoard sb;
             if (isVertical)
             {
-                sb = new ScreenBoard(splitPoint.X, selected.TopLeft.Y, selected.BottomRight.X, selected.BottomRight.Y);
                 selected.addChild(splitPoint.X, splitPoint.Y, "v");
 
             }
             else
             {
-                sb = new ScreenBoard(selected.TopLeft.X, splitPoint.Y, selected.BottomRight.X, selected.BottomRight.Y);
                 selected.addChild(splitPoint.X, splitPoint.Y, "h");
             }
             
             scrnPanel.Invalidate();
-            focused = sb;
-
+            focused = selected.Second;
+            selectedScreenBoard = focused;
             WindowItem.selectedScreenBoard = selected;
             screenBoardSelected?.Invoke();
-            return sb;
         }
         public void MouseUpClicked(object sender, MouseEventArgs e)
         {
@@ -242,11 +228,8 @@ namespace ArrangeWindows
                 {
                     resized = focused;
                 }
-               // drawScreenBoard(selectedScreenBoard, Pens.Red);
                 selectedScreenBoard.Monitor.DrawScreenBoard(selectedScreenBoard, Pens.Red);
-                Test = focused;
                 selectedScreenBoard = focused;
-               
                 drawScreenBoard(selectedScreenBoard, Pens.Blue);
             }
 
@@ -261,7 +244,6 @@ namespace ArrangeWindows
 
                 focused = getScreenBoardContainsPoint(root, e.Location);
                 focused = focused == null ? selectedScreenBoard : focused;
-                   // Test = focused;
             }
             if (focused != null)
                 getFocusedScreenBoard(e.Location);
