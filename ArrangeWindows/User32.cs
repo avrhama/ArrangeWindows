@@ -124,14 +124,12 @@ namespace ArrangeWindows
 
 
 
-            bool restore = false; ;
             User32.WindowState showCmd = (User32.WindowState)r.showCmd;
             switch (showCmd)
             {
                 case User32.WindowState.SW_HIDE:
                 case User32.WindowState.SW_MINIMIZE:
                 case User32.WindowState.SW_SHOWMINIMIZED:
-                    restore = true;
                     break;
             }
             if (preview)

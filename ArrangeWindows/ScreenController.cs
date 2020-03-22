@@ -20,7 +20,7 @@ namespace ArrangeWindows
         public static ScreenBoard selectedScreenBoard;
        
         int monitorIndex;
-        Monitor monitor;
+        public Monitor Monitor_ { set; get; }
         ScreenBoard root;
         ScreenBoard restore;
         public ScreenController(Screen screen,string name,int index)
@@ -29,20 +29,21 @@ namespace ArrangeWindows
             scrnCtrlNameLbl.Text = name;
             monitorIndex = index;
             root = new ScreenBoard(0, 0, scrnPanel.Width - 1, scrnPanel.Height - 1);
-            monitor.Name = name;
+            Monitor monitor;
+            Display display = new Display(new Point(screen.Bounds.Width, screen.Bounds.Height), name);
+            monitor.display = display;
             monitor.Index = index;
             monitor.Size = new Ancor(scrnPanel.Width, scrnPanel.Height);
-            monitor.Resolution = new Ancor(3840, 2160);
-            monitor.Resolution = new Ancor(screen.Bounds.Width, screen.Bounds.Height);
-            monitor.ScaleDown = Math.Min((float)monitor.Size.X / monitor.Resolution.X, (float)monitor.Size.Y / monitor.Resolution.Y);
-            monitor.ScaleUp = Math.Min(1/((float)monitor.Size.X / monitor.Resolution.X),1/( (float)monitor.Size.Y / monitor.Resolution.Y));
-            monitor.ScaleWidth = (float)monitor.Size.X / monitor.Resolution.X;
-            monitor.ScaleHeight = (float)monitor.Size.Y / monitor.Resolution.Y;
+            monitor.ScaleDown = Math.Min((float)monitor.Size.X / display.Resolution.X, (float)monitor.Size.Y / display.Resolution.Y);
+            monitor.ScaleUp = Math.Min(1/((float)monitor.Size.X / display.Resolution.X),1/( (float)monitor.Size.Y / display.Resolution.Y));
+            monitor.ScaleWidth = (float)monitor.Size.X / display.Resolution.X;
+            monitor.ScaleHeight = (float)monitor.Size.Y / display.Resolution.Y;
             monitor.Draw = Draw;
             monitor.DrawScreenBoard = drawScreenBoard;
             monitor.X = screen.Bounds.X;
             monitor.Y = screen.Bounds.Y;
             root.Monitor = monitor;
+            this.Monitor_ = monitor;
             selectedScreenBoard = root;
             focused = root;
             //initialize menu
@@ -91,8 +92,8 @@ namespace ArrangeWindows
         {
             Profile.Profile p;
             p.splitSpotSet = ProfileModel.getSplitSpot(root);
-            p.monitorName = monitor.Name;
-            p.resolution = new Point(monitor.Resolution.X, monitor.Y);
+            p.monitorName = Monitor_.display.Name;
+            p.resolution = new Point(Monitor_.display.Resolution.X, Monitor_.Y);
             return p;
         }
 
@@ -396,11 +397,11 @@ namespace ArrangeWindows
         public struct Monitor
         {
             public int Index;
-            public string Name;
+            //public string Name;
             //screencontroller control size.
             public Ancor Size;
             //monitor resolution.
-            public Ancor Resolution;
+            //public Ancor Resolution;
             //scale.
             public float ScaleDown;
             public float ScaleUp;
@@ -410,6 +411,8 @@ namespace ArrangeWindows
             public Action<ScreenBoard, Pen> DrawScreenBoard;
             public int X;
             public int Y;
+            public Display display;
+
         }
        
         bool drawing = true;
@@ -419,21 +422,8 @@ namespace ArrangeWindows
             drawingTimer.Stop();
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            string profilePath = String.Format(@"C:\Users\Brain\Documents\{0}.bin",monitor.Name);
-            ProfileModel.saveProfile(root, profilePath);
-        }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            string profilePath = String.Format(@"C:\Users\Brain\Documents\{0}.bin", monitor.Name);
-            SplitSpot splitSpot = ProfileModel.loadProfile(profilePath);
-            root.First = null;
-            root.Second = null;
-            loadProfile(splitSpot);
 
-        }
 
         private void loadProfile(SplitSpot splitSpot)
         {

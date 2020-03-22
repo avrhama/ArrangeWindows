@@ -32,12 +32,12 @@
             this.workingSetsLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.monitorsCombo = new System.Windows.Forms.ComboBox();
             this.profileNameTxt = new System.Windows.Forms.TextBox();
+            this.applayBtn = new ArrangeWindows.WindowButton();
             this.loadBtn = new ArrangeWindows.WindowButton();
             this.saveBtn = new ArrangeWindows.WindowButton();
-            this.applayBtn = new ArrangeWindows.WindowButton();
+            ((System.ComponentModel.ISupportInitialize)(this.applayBtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadBtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.saveBtn)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.applayBtn)).BeginInit();
             this.SuspendLayout();
             // 
             // workingSetsLayout
@@ -56,6 +56,7 @@
             this.monitorsCombo.Name = "monitorsCombo";
             this.monitorsCombo.Size = new System.Drawing.Size(600, 39);
             this.monitorsCombo.TabIndex = 12;
+            this.monitorsCombo.Visible = false;
             // 
             // profileNameTxt
             // 
@@ -64,36 +65,6 @@
             this.profileNameTxt.Name = "profileNameTxt";
             this.profileNameTxt.Size = new System.Drawing.Size(595, 38);
             this.profileNameTxt.TabIndex = 13;
-            // 
-            // loadBtn
-            // 
-            this.loadBtn.BtnImages = new System.Drawing.Bitmap[] {
-        global::ArrangeWindows.Resource1.LoadOff,
-        global::ArrangeWindows.Resource1.LoadOn};
-            this.loadBtn.Image = global::ArrangeWindows.Resource1.LoadOff;
-            this.loadBtn.Location = new System.Drawing.Point(25, 408);
-            this.loadBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.loadBtn.Name = "loadBtn";
-            this.loadBtn.Size = new System.Drawing.Size(200, 50);
-            this.loadBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.loadBtn.TabIndex = 10;
-            this.loadBtn.TabStop = false;
-            this.loadBtn.Type = ArrangeWindows.WindowButtonType.Add;
-            // 
-            // saveBtn
-            // 
-            this.saveBtn.BtnImages = new System.Drawing.Bitmap[] {
-        ((System.Drawing.Bitmap)(resources.GetObject("saveBtn.BtnImages"))),
-        ((System.Drawing.Bitmap)(resources.GetObject("saveBtn.BtnImages1")))};
-            this.saveBtn.Image = ((System.Drawing.Image)(resources.GetObject("saveBtn.Image")));
-            this.saveBtn.Location = new System.Drawing.Point(25, 408);
-            this.saveBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.saveBtn.Name = "saveBtn";
-            this.saveBtn.Size = new System.Drawing.Size(200, 50);
-            this.saveBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.saveBtn.TabIndex = 9;
-            this.saveBtn.TabStop = false;
-            this.saveBtn.Type = ArrangeWindows.WindowButtonType.Add;
             // 
             // applayBtn
             // 
@@ -110,6 +81,37 @@
             this.applayBtn.TabStop = false;
             this.applayBtn.Type = ArrangeWindows.WindowButtonType.Add;
             // 
+            // loadBtn
+            // 
+            this.loadBtn.BtnImages = new System.Drawing.Bitmap[] {
+        global::ArrangeWindows.Resource1.LoadOff,
+        global::ArrangeWindows.Resource1.LoadOn};
+            this.loadBtn.Image = global::ArrangeWindows.Resource1.LoadOff;
+            this.loadBtn.Location = new System.Drawing.Point(25, 408);
+            this.loadBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.loadBtn.Name = "loadBtn";
+            this.loadBtn.Size = new System.Drawing.Size(200, 50);
+            this.loadBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.loadBtn.TabIndex = 10;
+            this.loadBtn.TabStop = false;
+            this.loadBtn.Type = ArrangeWindows.WindowButtonType.Add;
+            this.loadBtn.Visible = false;
+            // 
+            // saveBtn
+            // 
+            this.saveBtn.BtnImages = new System.Drawing.Bitmap[] {
+        ((System.Drawing.Bitmap)(resources.GetObject("saveBtn.BtnImages"))),
+        ((System.Drawing.Bitmap)(resources.GetObject("saveBtn.BtnImages1")))};
+            this.saveBtn.Image = ((System.Drawing.Image)(resources.GetObject("saveBtn.Image")));
+            this.saveBtn.Location = new System.Drawing.Point(25, 408);
+            this.saveBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.saveBtn.Name = "saveBtn";
+            this.saveBtn.Size = new System.Drawing.Size(200, 50);
+            this.saveBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.saveBtn.TabIndex = 9;
+            this.saveBtn.TabStop = false;
+            this.saveBtn.Type = ArrangeWindows.WindowButtonType.Add;
+            // 
             // WorkingSetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -125,9 +127,9 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "WorkingSetForm";
             this.Text = "WorkingSetsForm";
+            ((System.ComponentModel.ISupportInitialize)(this.applayBtn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadBtn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.saveBtn)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.applayBtn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

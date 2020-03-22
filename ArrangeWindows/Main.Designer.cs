@@ -65,6 +65,7 @@
             // scrnCtrlsLayout
             // 
             this.scrnCtrlsLayout.AutoScroll = true;
+            this.scrnCtrlsLayout.BackColor = System.Drawing.SystemColors.Control;
             this.scrnCtrlsLayout.Location = new System.Drawing.Point(12, 12);
             this.scrnCtrlsLayout.Name = "scrnCtrlsLayout";
             this.scrnCtrlsLayout.Size = new System.Drawing.Size(1216, 837);
@@ -74,7 +75,8 @@
             // 
             this.groupBox1.Controls.Add(this.saveBtn);
             this.groupBox1.Controls.Add(this.loadBtn);
-            this.groupBox1.Location = new System.Drawing.Point(1885, 527);
+            this.groupBox1.ForeColor = System.Drawing.Color.White;
+            this.groupBox1.Location = new System.Drawing.Point(31, 882);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(435, 100);
             this.groupBox1.TabIndex = 14;
@@ -115,7 +117,7 @@
         global::ArrangeWindows.Resource1.settingsOff,
         ((System.Drawing.Bitmap)(resources.GetObject("settingsBtn.BtnImages")))};
             this.settingsBtn.Image = global::ArrangeWindows.Resource1.settingsOff;
-            this.settingsBtn.Location = new System.Drawing.Point(1891, 683);
+            this.settingsBtn.Location = new System.Drawing.Point(511, 919);
             this.settingsBtn.Name = "settingsBtn";
             this.settingsBtn.Size = new System.Drawing.Size(207, 50);
             this.settingsBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -128,7 +130,7 @@
             this.topCheck.AutoSize = true;
             this.topCheck.Checked = true;
             this.topCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.topCheck.Location = new System.Drawing.Point(1448, 855);
+            this.topCheck.Location = new System.Drawing.Point(767, 933);
             this.topCheck.Name = "topCheck";
             this.topCheck.Size = new System.Drawing.Size(93, 36);
             this.topCheck.TabIndex = 16;
@@ -140,13 +142,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2363, 984);
+            this.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.ClientSize = new System.Drawing.Size(1847, 1009);
             this.Controls.Add(this.topCheck);
             this.Controls.Add(this.settingsBtn);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.scrnCtrlsLayout);
             this.Controls.Add(this.showAllCheck);
             this.Controls.Add(this.winsLayout);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.Text = "Arrange Windows";
             this.Load += new System.EventHandler(this.Main_Load);

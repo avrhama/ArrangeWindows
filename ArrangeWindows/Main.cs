@@ -194,7 +194,7 @@ namespace ArrangeWindows
       
         public void updateFavoritesList()
         {
-            SerializeModel.SerializeObject<BindingList<string>>(favoritesWins, Environment.CurrentDirectory + @"\filteredList.bin");
+            SerializeModel.SerializeObject<BindingList<string>>(favoritesWins, Environment.CurrentDirectory + @"\favoritesList.bin");
         }
 
   

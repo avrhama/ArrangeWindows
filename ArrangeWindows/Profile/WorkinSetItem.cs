@@ -15,7 +15,9 @@ namespace ArrangeWindows.Profile
         
         public WorkingSet WorkingSet { set; get; }
         public bool Selected{ set; get; }
-        public Action<WorkingSet> WorkingSetItemAction;
+        public Action<WorkingSet> workingSetItemAction;
+       public  Action<string> deleteWorkingSetItemAction;
+
         public WorkinSetItem()
         {
             InitializeComponent();
@@ -34,7 +36,7 @@ namespace ArrangeWindows.Profile
                 Selected = !Selected;
                 if (Selected) { 
                 BackgroundImage = Resource1.windowCaseSelectedGrey;
-                WorkingSetItemAction?.Invoke(WorkingSet);
+                workingSetItemAction?.Invoke(WorkingSet);
                 }
                 else
                 {
@@ -43,24 +45,31 @@ namespace ArrangeWindows.Profile
 
                 }
             });
-            MouseEnter += new EventHandler((object sender, EventArgs e) => {
-                if (!Selected&&!WorkingSetForm.SaveMode)
+            MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
+                if (!Selected && !WorkingSetForm.SaveMode)
                     BackgroundImage = Resource1.windowCase;
             });
-            MouseLeave += new EventHandler((object sender, EventArgs e) => {
+            MouseLeave += new EventHandler((object sender, EventArgs e) =>
+            {
                 if (!Selected)
                     BackgroundImage = Resource1.windowCaseOff;
             });
-          closeBtn.Click += new EventHandler((object sender, EventArgs e) => {
-
+            deleteBtn.Click += new EventHandler((object sender, EventArgs e) =>
+            {
+               DialogResult dr=MessageBox.Show($"Are you sure you want to delete:\n{WorkingSet.name}?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (dr == DialogResult.Yes)
+                    deleteWorkingSetItemAction?.Invoke(WorkingSet.name);
             });
-            closeBtn.MouseEnter += new EventHandler((object sender, EventArgs e) => {
+            deleteBtn.MouseEnter += new EventHandler((object sender, EventArgs e) =>
+            {
                 if (!Selected)
-                    closeBtn.Image = Resource1.closeOn;
+                    deleteBtn.Image = Resource1.closeOn;
             });
-            closeBtn.MouseLeave += new EventHandler((object sender, EventArgs e) => {
+            deleteBtn.MouseLeave += new EventHandler((object sender, EventArgs e) =>
+            {
                 if (!Selected)
-                    closeBtn.Image = Resource1.closeOff;
+                    deleteBtn.Image = Resource1.closeOff;
             });
         }
         public void WorkingSetItemSelected(string name)

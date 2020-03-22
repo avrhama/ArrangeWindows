@@ -14,7 +14,7 @@ namespace ArrangeWindows.Profile
     {
         private static WorkingSetForm singalton;
         WorkingSet workingSet;
-        Action<string> WorkingSetItemAction;
+        Action<string> WorkingSetItemSelectedAction;
         ScreenController[] screenControllers;
    
        public static bool SaveMode { set; get; }
@@ -36,7 +36,7 @@ namespace ArrangeWindows.Profile
             saveBtn.Click += new EventHandler((object sender, EventArgs e) =>
             {
                 workingSet.name = profileNameTxt.Text.Trim();
-                string filePath = String.Format(@"{0}{1}.bin", Settings.Settings.WorkSetPath, workingSet.name);
+                string filePath = String.Format(@"{0}\{1}.bin", Settings.Settings.WorkSetPath, workingSet.name);
                 SerializeModel.SerializeObject(workingSet, filePath);
                 WorkinSetItem workinSetItem = new WorkinSetItem(workingSet);
                 workingSetsLayout.Controls.Add(workinSetItem);
@@ -59,9 +59,9 @@ namespace ArrangeWindows.Profile
             if (singalton == null || singalton.IsDisposed)
             {
                 singalton = new WorkingSetForm();
-               
-                foreach (Monitor m in monitors)
-                    singalton.monitorsCombo.Items.Add(m);
+                //for future development.
+                foreach (Display d in displays)
+                    singalton.monitorsCombo.Items.Add(d);
                 singalton.loadWorkSetsItems();
                 
             }
@@ -82,8 +82,10 @@ namespace ArrangeWindows.Profile
                         continue;
                     WorkingSet workingSet_ = SerializeModel.DeSerializeObject<WorkingSet>(path);
                     WorkinSetItem workinSetItem = new WorkinSetItem(workingSet_);
-                    WorkingSetItemAction += workinSetItem.WorkingSetItemSelected;
-                    workinSetItem.WorkingSetItemAction += WorkingSetItemSelected;
+                    workinSetItem.Name = workingSet_.name;
+                    WorkingSetItemSelectedAction += workinSetItem.WorkingSetItemSelected;
+                    workinSetItem.workingSetItemAction += WorkingSetItemSelected;
+                    workinSetItem.deleteWorkingSetItemAction += deleteWorkingSet;
                     workingSetsLayout.Controls.Add(workinSetItem);
                     list.Add(workingSet_);
                 }
@@ -92,8 +94,16 @@ namespace ArrangeWindows.Profile
         static public void loadWorkSets(ScreenController [] screenControllers)
         {
             cerateSinglton();
+            //for future development.
+            if (screenControllers.Length == 1)
+            {
+               int x= singalton.monitorsCombo.Items.IndexOf(screenControllers[0].Monitor_.display);
+                singalton.monitorsCombo.SelectedIndex = singalton.monitorsCombo.Items.IndexOf(screenControllers[0].Monitor_.display);
+            }
+            
             singalton.screenControllers = screenControllers;
-            singalton.loadBtn.Visible = true;
+            //singalton.loadBtn.Visible = true;
+            singalton.profileNameTxt.Visible = false;
             singalton.saveBtn.Visible = false;
             SaveMode = false;
             foreach(WorkinSetItem workinSetItem in singalton.workingSetsLayout.Controls)
@@ -108,7 +118,8 @@ namespace ArrangeWindows.Profile
         {
             cerateSinglton();
             singalton.workingSet = workingSet;
-            singalton.loadBtn.Visible = false;
+           // singalton.loadBtn.Visible = false;
+            singalton.profileNameTxt.Visible = true;
             singalton.saveBtn.Visible = true;
             SaveMode = true;
             foreach (WorkinSetItem workinSetItem in singalton.workingSetsLayout.Controls)
@@ -117,12 +128,12 @@ namespace ArrangeWindows.Profile
                     workinSetItem.Visible = true;
             }
         }
-        static List<Monitor> monitors;
+        static List<Display> displays;
         public static void setMonitor(int x, int y, string deviceString)
         {
-            if (monitors == null)
-                monitors = new List<Monitor>();
-            monitors.Add(new Monitor(new Point(x, y), deviceString));
+            if (displays == null)
+                displays = new List<Display>();
+            displays.Add(new Display(new Point(x, y), deviceString));
         }
         public void WorkingSetItemSelected(WorkingSet workingSet)
         {
@@ -132,24 +143,18 @@ namespace ArrangeWindows.Profile
                 screenControllers[i].previewProfile(workingSet.profiles[i].splitSpotSet);
             }
             
-            WorkingSetItemAction?.Invoke(workingSet.name);
+            WorkingSetItemSelectedAction?.Invoke(workingSet.name);
 
         }
-        private class Monitor
+        public void deleteWorkingSet(string workingSetName)
         {
-            string toString;
-            public Point Resolution { set; get; }
-            public string Name { set; get; }
-            public Monitor(Point res, string name)
-            {
-                Resolution = res;
-                Name = name;
-                toString = String.Format("{0}({1}x{2})", name, res.X, res.Y);
-            }
-            public override string ToString()
-            {
-                return toString;
-            }
+            WorkinSetItem workinSetItem =(WorkinSetItem)workingSetsLayout.Controls.Find(workingSetName, false)[0];
+            workingSetsLayout.Controls.Remove(workinSetItem);
+            System.IO.File.Delete(String.Format(@"{0}\{1}.bin", Settings.Settings.WorkSetPath, workingSetName));
+
+
         }
+
+
     }
 }

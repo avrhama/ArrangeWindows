@@ -14,8 +14,13 @@ using System.Xml.Serialization;
 
             try
             {
-
-                XmlDocument xmlDocument = new XmlDocument();
+            if (!System.IO.File.Exists(fileName))
+            {
+               FileStream fs= System.IO.File.Create(fileName);
+                fs.Close();
+            }
+                
+            XmlDocument xmlDocument = new XmlDocument();
                 XmlSerializer serializer = new XmlSerializer(serializableObject.GetType());
                 using (MemoryStream stream = new MemoryStream())
                 {
@@ -46,6 +51,7 @@ using System.Xml.Serialization;
 
             try
             {
+           
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(fileName);
                 string xmlString = xmlDocument.OuterXml;

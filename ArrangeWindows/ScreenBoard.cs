@@ -97,17 +97,12 @@ namespace ArrangeWindows
         public ScreenBoard(int x1,int y1,int x2,int y2)
         {
             topLeft = new Ancor(x1, y1);
-            //topLeft.CoordinateX.CoordinateChanged += coordinateChanged;
-            //topLeft.CoordinateY.CoordinateChanged += coordinateChanged;
             registerCoordinateChangedEvent(topLeft);
             bottomRight = new Ancor(x2, y2);
-            //bottomRight.CoordinateX.CoordinateChanged += coordinateChanged;
-            //bottomRight.CoordinateY.CoordinateChanged += coordinateChanged;
             registerCoordinateChangedEvent(bottomRight);
             topRight = new Ancor(bottomRight.X, topLeft.Y);       
             bottomLeft = new Ancor(topLeft.X, bottomRight.Y);
-            size = new Size(x2-x1, y2-y1);
-          
+            size = new Size(x2-x1, y2-y1);   
         }
         public ScreenBoard(Ancor topLeft,Ancor topRight,Ancor bottomRight,Ancor bottomLeft)
         {
@@ -121,14 +116,6 @@ namespace ArrangeWindows
             registerCoordinateChangedEvent(topRight);
             registerCoordinateChangedEvent(bottomLeft);
             registerCoordinateChangedEvent(bottomRight);
-            /* this.topLeft.CoordinateX.CoordinateChanged     +=coordinateChanged;
-             this.topLeft.CoordinateY.CoordinateChanged     +=coordinateChanged;
-             this.topRight.CoordinateX.CoordinateChanged    +=coordinateChanged;
-             this.topRight.CoordinateY.CoordinateChanged    +=coordinateChanged;
-             this.bottomLeft.CoordinateX.CoordinateChanged  +=coordinateChanged;
-             this.bottomLeft.CoordinateY.CoordinateChanged  +=coordinateChanged;
-             this.bottomRight.CoordinateX.CoordinateChanged +=coordinateChanged;
-             this.bottomRight.CoordinateY.CoordinateChanged +=coordinateChanged;*/
 
         }
         public void registerCoordinateChangedEvent(Ancor a,bool register=true)
@@ -153,17 +140,6 @@ namespace ArrangeWindows
             ScreenBoard second;
             Ancor a1;
             Ancor a2;
-            //Ancor:topLeft,topRight,bottomRight,bottomLeft
-
-            // topLeft.CoordinateX.CoordinateChanged -= coordinateChanged;
-            // topLeft.CoordinateY.CoordinateChanged -= coordinateChanged;
-            // topRight.CoordinateX.CoordinateChanged -= coordinateChanged;
-            // topRight.CoordinateY.CoordinateChanged -= coordinateChanged;
-
-            // bottomLeft.CoordinateX.CoordinateChanged -= coordinateChanged;
-            // bottomLeft.CoordinateY.CoordinateChanged -= coordinateChanged;
-            //bottomRight.CoordinateX.CoordinateChanged -= coordinateChanged;
-            // bottomRight.CoordinateY.CoordinateChanged -= coordinateChanged;
             registerCoordinateChangedEvent(topLeft, false);
             registerCoordinateChangedEvent(topRight, false);
             registerCoordinateChangedEvent(bottomLeft, false);
@@ -185,11 +161,7 @@ namespace ArrangeWindows
                  a2 = new Ancor(BottomRight.CoordinateX, a1.CoordinateY);
                 first = new ScreenBoard(TopLeft, TopRight, a2, a1);
                 second = new ScreenBoard(a1, a2, BottomRight, BottomLeft);
-
-
             }
-
-
 
             first.Monitor = Monitor;
             second.Monitor = Monitor;
@@ -229,10 +201,8 @@ namespace ArrangeWindows
             Parent = sb.Parent;
         }
 
-
         public void removeChild(ScreenBoard child)
-        {
-            
+        {       
             if (First != null)
             {
                 ScreenBoard otherChild;
@@ -276,8 +246,6 @@ namespace ArrangeWindows
                         First.bottomRight = Second.bottomRight;
                         First.registerCoordinateChangedEvent(First.topRight);
                         First.registerCoordinateChangedEvent(First.bottomRight);
-
-
                     }
                     else
                     {
@@ -289,16 +257,12 @@ namespace ArrangeWindows
                         First.bottomLeft = Second.bottomLeft;
                         First.registerCoordinateChangedEvent(First.bottomRight);
                         First.registerCoordinateChangedEvent(First.bottomLeft);
-
                     }
                     otherChild = First;
-
                 }
-
                 ScreenBoard parent = Parent;
                 if (parent != null)
                 {
-                    //cmp = ScreenBoard.compareScreenBoard(this, parent.First);
                     if (isFirst())
                         parent.First = otherChild;
                     else
@@ -309,8 +273,7 @@ namespace ArrangeWindows
                 {
                     otherChild.Parent = null;
                     replace(otherChild);
-                }
-               
+                }         
             }
             else
             {
@@ -323,8 +286,7 @@ namespace ArrangeWindows
              Parent?.removeChild(this);
         }
         public bool isFirst()
-        {
-            
+        {           
             return compareScreenBoard(this.Parent.First, this)== 0;
         }
         public void coordinateChanged()
@@ -338,14 +300,9 @@ namespace ArrangeWindows
                 size = temp;
                
                 Monitor.Draw?.Invoke();
-            }
-           
+           }        
         }
-        /*public void sizeChanged()
-        {
-            if (WindowItem != null)
-                WindowItem.setWinPreview();
-        }*/
+
         static public int compareScreenBoard(ScreenBoard a, ScreenBoard b)
         {
             if (a.TopLeft.X == b.TopLeft.X)
@@ -355,31 +312,8 @@ namespace ArrangeWindows
         public bool containsPoint(Point p)
         {
             return (this.TopLeft.X <= p.X && this.BottomRight.X >= p.X && this.TopLeft.Y <= p.Y && this.BottomRight.Y >= p.Y);
-
         }
         //find the screenBoad that contains the given point.
-        static public int findScreenBoad(List<ScreenBoard> list,int i,int j,Point goal)
-        {
-            if (i > j)
-                return -1;
-            int n = (j - i) / 2+i;
-            if (n == list.Count)
-                n = 0;
-            ScreenBoard mid = list[n];
-            if (mid.containsPoint(goal))
-                return n;
-            if (goal.X < mid.TopLeft.X||n > 0&&list[n-1].BottomRight.X>=goal.X&& mid.TopLeft.X<=goal.X)
-                return findScreenBoad(list, i, n - 1, goal);
-            else
-                return findScreenBoad(list, n + 1, j, goal);
-
-           /* if (goal.X <mid.TopLeft.X||(goal.X== mid.TopLeft.X && mid.TopLeft.Y > goal.Y))
-                return findScreenBoad(list, i, n-1,goal);
-            else if(goal.X > mid.TopLeft.X || (goal.X == mid.TopLeft.X && mid.TopLeft.Y < goal.Y))
-                return findScreenBoad(list, n+1, j, goal);*/
-
-           // return -1;
-        }
         public override bool Equals(object obj)
         {
             if (obj.GetType() != GetType())
@@ -387,7 +321,5 @@ namespace ArrangeWindows
             ScreenBoard sb = (ScreenBoard)obj;
             return (sb.Monitor.Index == Monitor.Index && sb.Index == Index);
         }
-
-
     }
 }

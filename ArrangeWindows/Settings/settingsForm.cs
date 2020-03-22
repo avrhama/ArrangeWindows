@@ -15,8 +15,8 @@ namespace ArrangeWindows.Settings
     {
 
         ContextMenu favoritesWinsMenu;
-       
-      
+
+
         public settingsForm(Settings settings)
         {
             InitializeComponent();
@@ -28,17 +28,17 @@ namespace ArrangeWindows.Settings
                 settings.updateFavoritesList();
             })));
             favoritesWinsList.DataSource = settings.FavoritesWins;
-            filterListPathLbl.Text = Settings.FilterListPath;
-            workSetPathLbl.Text = Settings.WorkSetPath;
+            favoritesListPathLbl.Text ="Favorites Dir:"+Settings.FavoritesListPath;
+            workSetsPathLbl.Text ="Worksets Dir:"+Settings.WorkSetPath;
 
             ToolTip tt = new ToolTip();
-            filterListPathLbl.MouseHover += new EventHandler((object sender, EventArgs e) =>
+            favoritesListPathLbl.MouseHover += new EventHandler((object sender, EventArgs e) =>
             {
-                tt.Show(Settings.FilterListPath, filterListPathLbl, 5000);
+                tt.Show(Settings.FavoritesListPath, favoritesListPathLbl, 5000);
             });
-            workSetPathLbl.MouseHover += new EventHandler((object sender, EventArgs e) =>
+            workSetsPathLbl.MouseHover += new EventHandler((object sender, EventArgs e) =>
             {
-                tt.Show(Settings.WorkSetPath, workSetPathLbl, 5000);
+                tt.Show(Settings.WorkSetPath, workSetsPathLbl, 5000);
             });
             this.settings = settings;
 
@@ -63,7 +63,7 @@ namespace ArrangeWindows.Settings
         {
             settings.updateFavoritesList();
         }
-        private void filterListMouseUp(object sender, MouseEventArgs e)
+        private void favoritesListMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -78,9 +78,9 @@ namespace ArrangeWindows.Settings
             OpenFileDialog openFileDialog;
             openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "program files (*.exe)|*.exe";
-            openFileDialog.ShowDialog();
-            string winName;
-            //(.exe|$)
+            DialogResult dr= openFileDialog.ShowDialog();
+            if (dr != DialogResult.OK)
+                return;
             Regex re = new Regex(@".+\\(?<programName>.+)(\.exe)");
             
             foreach (string proPath in openFileDialog.FileNames)
@@ -96,29 +96,33 @@ namespace ArrangeWindows.Settings
 
         }
 
-        private void filterListBrowserBtn_Click(object sender, EventArgs e)
+        private void favoritesListBrowserBtn_Click(object sender, EventArgs e)
         {
 
             FolderBrowserDialog openFolderDialog=new FolderBrowserDialog();
             openFolderDialog.ShowNewFolderButton = true;
-            openFolderDialog.ShowDialog();
+            DialogResult dr = openFolderDialog.ShowDialog();
+            if (dr != DialogResult.OK)
+                return;
             if (openFolderDialog.SelectedPath.Length > 0)
             {
-                Settings.FilterListPath = openFolderDialog.SelectedPath;
-                filterListPathLbl.Text = Settings.FilterListPath;
+                Settings.FavoritesListPath = openFolderDialog.SelectedPath;
+                favoritesListPathLbl.Text = "Favorites Dir:" + Settings.FavoritesListPath;
                 settings.updatePaths();
             }
         }
 
-        private void workSetPathBrowserBtn_Click(object sender, EventArgs e)
+        private void workSetsPathBrowserBtn_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.ShowNewFolderButton = true;
-            openFolderDialog.ShowDialog();
+            DialogResult dr = openFolderDialog.ShowDialog();
+            if (dr != DialogResult.OK)
+                return;
             if (openFolderDialog.SelectedPath.Length > 0)
             {
                 Settings.WorkSetPath = openFolderDialog.SelectedPath;
-                workSetPathLbl.Text = Settings.WorkSetPath;
+                workSetsPathLbl.Text = "Worksets Dir:" + Settings.WorkSetPath;
                 settings.updatePaths();
             }
         }

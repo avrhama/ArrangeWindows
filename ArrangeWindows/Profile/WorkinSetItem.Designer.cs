@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.workingSetName = new System.Windows.Forms.Label();
-            this.closeBtn = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.closeBtn)).BeginInit();
+            this.deleteBtn = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.deleteBtn)).BeginInit();
             this.SuspendLayout();
             // 
             // workingSetName
@@ -46,15 +46,15 @@
             // 
             // closeBtn
             // 
-            this.closeBtn.BackColor = System.Drawing.Color.Transparent;
-            this.closeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.closeBtn.Image = global::ArrangeWindows.Resource1.closeOff;
-            this.closeBtn.Location = new System.Drawing.Point(401, 6);
-            this.closeBtn.Name = "closeBtn";
-            this.closeBtn.Size = new System.Drawing.Size(40, 40);
-            this.closeBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.closeBtn.TabIndex = 2;
-            this.closeBtn.TabStop = false;
+            this.deleteBtn.BackColor = System.Drawing.Color.Transparent;
+            this.deleteBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.deleteBtn.Image = global::ArrangeWindows.Resource1.closeOff;
+            this.deleteBtn.Location = new System.Drawing.Point(401, 6);
+            this.deleteBtn.Name = "closeBtn";
+            this.deleteBtn.Size = new System.Drawing.Size(40, 40);
+            this.deleteBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.deleteBtn.TabIndex = 2;
+            this.deleteBtn.TabStop = false;
             // 
             // WorkinSetItem
             // 
@@ -63,12 +63,12 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImage = global::ArrangeWindows.Resource1.windowCaseOff;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Controls.Add(this.closeBtn);
+            this.Controls.Add(this.deleteBtn);
             this.Controls.Add(this.workingSetName);
             this.DoubleBuffered = true;
             this.Name = "WorkinSetItem";
             this.Size = new System.Drawing.Size(450, 51);
-            ((System.ComponentModel.ISupportInitialize)(this.closeBtn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.deleteBtn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -77,6 +77,6 @@
         #endregion
 
         private System.Windows.Forms.Label workingSetName;
-        private System.Windows.Forms.PictureBox closeBtn;
+        private System.Windows.Forms.PictureBox deleteBtn;
     }
 }
